@@ -6,7 +6,7 @@ import React from "react";
 
 export default function DetailOrder() {
   return (
-    <section className="px-24">
+    <section className="px-24  py-12">
       <div className="flex gap-48 justify-center">
         <div className="py-12 flex flex-col  gap-4 rounded-xl ">
           <h2 className="text-2xl font-semibold w-fit">Order Summary</h2>

@@ -10,13 +10,13 @@ export default function ListProduct() {
     (category) => category.category === "Cake"
   );
 
-  const minumanCategory = dataKategori.find(
+  const RotiCategory = dataKategori.find(
     (category) => category.category === "Roti"
   );
 
   const combinedProducts = [
     ...(cakeCategory?.products || []),
-    ...(minumanCategory?.products || []),
+    ...(RotiCategory?.products || []),
   ];
 
   return (

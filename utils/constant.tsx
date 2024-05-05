@@ -12,4 +12,3 @@ export const formatCurrency = (amount: string) => {
       currency: "IDR",
     }).format(stringToNumber(amount));
 };
-

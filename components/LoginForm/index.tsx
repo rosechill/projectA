@@ -13,6 +13,7 @@ const schema = yup.object({
   email: yup.string().required("Email harus diisi"),
   password: yup.string().required("Password harus diisi"),
 });
+
 export default function LoginForm() {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);

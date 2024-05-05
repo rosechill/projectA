@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { IconChevronRight } from "@/assets/images";
 import { dataKategori } from "@/utils/dataKategori";
 import Image from "next/image";
 import Link from "next/link";
