@@ -24,6 +24,46 @@ export const dataMenuAdmin: DataMenu[] = [
     name: "mstProduk",
     path: "/mstProduk",
   },
+  {
+    name: "mstPromo",
+    path: "/mstPromo",
+  },
+  {
+    name: "mstResep",
+    path: "/mstResep",
+  },
+  {
+    name: "mstBahanBaku",
+    path: "/mstBahanBaku",
+  },
+  {
+    name: "mstHampers",
+    path: "/mstHampers",
+  },
+  {
+    name: "mstJabatan",
+    path: "/mstJabatan",
+  },
+  {
+    name: "mstKaryawan",
+    path: "/mstKaryawan",
+  },
+  {
+    name: "mstPenitip",
+    path: "/mstPenitip",
+  },
+  {
+    name: "mstPembelianBahanBuku",
+    path: "/mstPembelianBahanBuku",
+  },
+  {
+    name: "mstPengeluaranLain",
+    path: "/mstPengeluaranLain",
+  },
+  {
+    name: "mstPresensi",
+    path: "/mstPresensi",
+  },
 ]
 
 export const dataMenuMO: DataMenu[] = [
