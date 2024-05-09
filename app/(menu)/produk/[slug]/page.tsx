@@ -3,12 +3,12 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import { dataKategori } from "@/utils/dataKategori";
-import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@nextui-org/react";
 import { ShoppingCart } from "@/assets/images";
-import OthersProduct from "@/components/OthersProduct";
 import { formatCurrency } from "@/utils/constant";
+import Image from "next/image";
+import Link from "next/link";
+import OthersProduct from "@/components/OthersProduct";
 
 export default function DetailProduk() {
   const pathname = usePathname();
