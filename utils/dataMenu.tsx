@@ -14,3 +14,25 @@ export const dataMenu: DataMenu[] = [
     path: "/pesanan",
   },
 ];
+
+export const dataMenuAdmin: DataMenu[] = [
+  {
+    name: "mstUser",
+    path: "/mstUser",
+  },
+  {
+    name: "mstProduk",
+    path: "/mstProduk",
+  },
+]
+
+export const dataMenuMO: DataMenu[] = [
+  {
+    name: "mstUser",
+    path: "/mstUser",
+  },
+  {
+    name: "mstProduk",
+    path: "/mstProduk",
+  },
+]

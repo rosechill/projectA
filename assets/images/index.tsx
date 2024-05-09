@@ -51,6 +51,7 @@ import Gopay from "./Gopay.png";
 import ShopePay from "./ShopePay.png";
 import OrderHero from "./OrderHero.png";
 import Maaf from "./Maaf.png";
+import User from './user.png'
 export {
   AtmaKitchen,
   PeopleLogin,
@@ -104,5 +105,6 @@ export {
   Gopay,
   Ovo,
   OrderHero,
-  Maaf
+  Maaf,
+  User
 };
