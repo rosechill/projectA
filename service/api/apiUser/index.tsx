@@ -1,11 +1,12 @@
 'use server'
-import { UserFormInterface, UserInterface } from '@interfaces/userInterface'
-import satellite from '@services/satellite'
-import { read } from '@store/cookies'
+
+import { DataKaryawan } from '@/interfaces/KaryawanInterface'
+import satellite from '@/service/satellite'
+import { read } from '@/store/cookies'
 
 let userAccountPromise: Promise<any> | null = null
 
-const apiGetUserAccount = () => {
+const apiGetKaryawan = () => {
   if (userAccountPromise) {
     return userAccountPromise
   }
@@ -17,7 +18,7 @@ const apiGetUserAccount = () => {
           Authorization: `Bearer ${read('__TOKEN__')}`,
         },
       })
-      .then((response: { data: UserInterface }) => {
+      .then((response: { data: DataKaryawan }) => {
         const storageData = response.data
         resolve({ status: 'success', data: storageData })
       })
@@ -32,21 +33,21 @@ const apiGetUserAccount = () => {
   return userAccountPromise
 }
 
-export default apiGetUserAccount
+export default apiGetKaryawan
 
-export const apiCreateUser = async (body: UserFormInterface) => {
-  await satellite
-    .post(`${process.env.NEXT_PUBLIC_BASE_URL}/userAccount`, body, {
-      headers: {
-        Authorization: `Bearer ${read('__TOKEN__')}`,
-      },
-    })
-    .catch(err => {
-      throw err.response.data
-    })
-    .then(() => {})
-  return apiCreateUser
-}
+// export const apiCreateUser = async (body: UserFormInterface) => {
+//   await satellite
+//     .post(`${process.env.NEXT_PUBLIC_BASE_URL}/userAccount`, body, {
+//       headers: {
+//         Authorization: `Bearer ${read('__TOKEN__')}`,
+//       },
+//     })
+//     .catch(err => {
+//       throw err.response.data
+//     })
+//     .then(() => {})
+//   return apiCreateUser
+// }
 
 export const apiEditUser = async (body: {id?: number, username: string; password: string, role: string; }) => {
   await satellite

@@ -21,10 +21,16 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 // import { UserInterface } from '@interfaces/userInterface'
+
 // import apiGetUserAccount from '@services/api/apiUser'
-import { columns } from '@/utils/columnsTable/dataUser'
+import apiGetKaryawan from '@/service/api/apiUser';
+
+// import { columns } from '@/utils/columnsTable/dataUser'
+
+import {columns, users, statusOptions} from "@/utils/columnsTable/dataUser";
 import { PlusIcon, ChevronDownIcon, SearchIcon, IconFilledEye, IconEdit, IconDelete } from '@/assets/icons'
 import { capitalize } from '@/utils/capitalize'
+import { DataKaryawan } from '@/interfaces/KaryawanInterface';
 const INITIAL_VISIBLE_COLUMNS = ['id', 'username', 'role', 'password', 'actions']
 
 export default function UserTable() {
@@ -38,13 +44,18 @@ export default function UserTable() {
   })
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
-  const [users, setUsers] = useState<UserInterface[]>([])
+
+  //
+  const [statusFilter, setStatusFilter] = React.useState("all");
+
+
+  const [users, setUsers] = useState<DataKaryawan[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const response = await apiGetUserAccount()
+        const response = await apiGetKaryawan()
         setUsers(response.data.data)
       } catch (error) {
         setLoading(true)
@@ -65,15 +76,31 @@ export default function UserTable() {
     return columns.filter(column => Array.from(visibleColumns).includes(column.uid))
   }, [visibleColumns])
 
+  // const filteredItems = React.useMemo(() => {
+  //   let filteredUsers = [...users]
+
+  //   if (hasSearchFilter) {
+  //     filteredUsers = filteredUsers.filter(user => user.username.toLowerCase().includes(filterValue.toLowerCase()))
+  //   }
+
+  //   return filteredUsers
+  // }, [users, filterValue])
+
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users]
+    let filteredUsers = [...users];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter(user => user.username.toLowerCase().includes(filterValue.toLowerCase()))
+      filteredUsers = filteredUsers.filter((user) =>
+        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+      );
     }
-
-    return filteredUsers
-  }, [users, filterValue])
+    // if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
+    //   filteredUsers = filteredUsers.filter((user) =>
+    //     Array.from(statusFilter).includes(user.status),
+    //   );
+    // }
+    return filteredUsers;
+  }, [users, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
@@ -82,18 +109,28 @@ export default function UserTable() {
     return filteredItems.slice(start, end)
   }, [page, filteredItems, rowsPerPage])
 
+  // const sortedItems = React.useMemo(() => {
+  //   return [...items].sort((a: UserInterface, b: UserInterface) => {
+  //     const first = a[sortDescriptor.column as keyof UserInterface] as number
+  //     const second = b[sortDescriptor.column as keyof UserInterface] as number
+  //     const cmp = first < second ? -1 : first > second ? 1 : 0
+
+  //     return sortDescriptor.direction === 'descending' ? -cmp : cmp
+  //   })
+  // }, [sortDescriptor, items])
+
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: UserInterface, b: UserInterface) => {
-      const first = a[sortDescriptor.column as keyof UserInterface] as number
-      const second = b[sortDescriptor.column as keyof UserInterface] as number
-      const cmp = first < second ? -1 : first > second ? 1 : 0
+    return [...items].sort((a, b) => {
+      const first = a[sortDescriptor.column as keyof typeof a];
+      const second = b[sortDescriptor.column as keyof typeof b];
+      const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-      return sortDescriptor.direction === 'descending' ? -cmp : cmp
-    })
-  }, [sortDescriptor, items])
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: UserInterface, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof UserInterface]
+  const renderCell = React.useCallback((user: any, columnKey: React.Key) => {
+    const cellValue = user[columnKey as keyof any]
     const roleText = cellValue === '1' ? 'admin' : 'user'
 
     switch (columnKey) {
@@ -258,12 +295,11 @@ export default function UserTable() {
     []
   )
 
-  if (loading) return 'Loading...'
+  // if (loading) return 'Loading...'
 
   return (
-    <>
+    <div className='p-7'>
       <h2 className="text-xl font-semibold pb-4">Master User</h2>
-
       <Table
         isCompact
         removeWrapper
@@ -294,6 +330,6 @@ export default function UserTable() {
           )}
         </TableBody>
       </Table>
-    </>
+    </div>
   )
 }
