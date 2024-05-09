@@ -1,4 +1,4 @@
-export default function IconClose({ width = 25, height = 25, color = '#0091FF', ...props }) {
+export default function IconClose({ width = 25, height = 25, color = '#fff', ...props }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

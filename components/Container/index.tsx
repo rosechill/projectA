@@ -5,6 +5,7 @@ import Navigation from "../Navigation";
 import Footer from "../Footer";
 import MenuAdmin from "../(table)/MenuAdmin";
 import Header from "../(table)/Header";
+import { dataMenuAdmin } from "@/utils/dataMenu";
 
 export default function Container({
   children,
@@ -14,7 +15,8 @@ export default function Container({
   const pathname = usePathname();
 
   if (pathname !== "/login" && pathname !== "/daftar") {
-    if (pathname === "/admin") {
+    const isAdminPath = dataMenuAdmin.some(menu => pathname.startsWith(menu.path));
+    if (pathname === "/admin" || isAdminPath  ) {
       return (
         <div className="overflow-x-hidden">
           <ContainerProvider>
