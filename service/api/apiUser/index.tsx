@@ -13,10 +13,10 @@ const apiGetKaryawan = () => {
 
   userAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/userAccount`, {
-        headers: {
-          Authorization: `Bearer ${read('__TOKEN__')}`,
-        },
+      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/karyawan/alltantok`, {
+        // headers: {
+        //   Authorization: `Bearer ${read('__TOKEN__')}`,
+        // },
       })
       .then((response: { data: DataKaryawan }) => {
         const storageData = response.data
@@ -49,33 +49,33 @@ export default apiGetKaryawan
 //   return apiCreateUser
 // }
 
-export const apiEditUser = async (body: {id?: number, username: string; password: string, role: string; }) => {
-  await satellite
-    .put(`${process.env.NEXT_PUBLIC_BASE_URL}/userAccount`, body, {
-      headers: {
-        Authorization: `Bearer ${read('__TOKEN__')}`,
-      },
-    })
-    .catch(err => {
-      throw err.response.data
-    })
-    .then(() => {})
-  return apiEditUser
-}
+// export const apiEditUser = async (body: {id?: number, username: string; password: string, role: string; }) => {
+//   await satellite
+//     .put(`${process.env.NEXT_PUBLIC_BASE_URL}/userAccount`, body, {
+//       headers: {
+//         Authorization: `Bearer ${read('__TOKEN__')}`,
+//       },
+//     })
+//     .catch(err => {
+//       throw err.response.data
+//     })
+//     .then(() => {})
+//   return apiEditUser
+// }
 
-export const apiDeleteUser = async (id: number) => {
-  await satellite
-    .delete(`${process.env.NEXT_PUBLIC_BASE_URL}/userAccount`, {
-      headers: {
-        Authorization: `Bearer ${read('__TOKEN__')}`,
-      },
-      data: {
-        id: id,
-      },
-    })
-    .catch(err => {
-      throw err.response.data
-    })
-    .then(() => {})
-  return apiDeleteUser
-}
+// export const apiDeleteUser = async (id: number) => {
+//   await satellite
+//     .delete(`${process.env.NEXT_PUBLIC_BASE_URL}/userAccount`, {
+//       headers: {
+//         Authorization: `Bearer ${read('__TOKEN__')}`,
+//       },
+//       data: {
+//         id: id,
+//       },
+//     })
+//     .catch(err => {
+//       throw err.response.data
+//     })
+//     .then(() => {})
+//   return apiDeleteUser
+// }
