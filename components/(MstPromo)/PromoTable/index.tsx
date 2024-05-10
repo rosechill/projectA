@@ -32,6 +32,7 @@ import { capitalize } from "@/utils/capitalize";
 import { DataPromo } from "@/interfaces/PromoInterface";
 import { columns } from "@/utils/columnsTable/dataPromo";
 import apiGetPromo from "@/service/api/apiPromo";
+import ViewPromoModal from "../ViewPromoModal";
 const INITIAL_VISIBLE_COLUMNS = ["id", "kelipatan", "bonus_poin", "actions"];
 
 export default function PromoTable() {
@@ -50,16 +51,20 @@ export default function PromoTable() {
 
   const [promos, setPromos] = useState<DataPromo[]>([]);
   //handlerModal
-  //   const [selectedKaryawan, setSelectedKaryawan] = useState<DataPromo | null>(null)
-  //   const { isOpen: isViewKaryawanModalOpen, onOpenChange: onViewKaryawanModalOpenChange } = useDisclosure()
-  //   const openKaryawanDetailsModal = (users: DataPromo) => {
-  //     setSelectedKaryawan(users)
-  //     onViewKaryawanModalOpenChange()
-  //   }
-  //   const onCloseKaryawanDeviceModal = () => {
-  //     setSelectedKaryawan(null)
-  //     onViewKaryawanModalOpenChange()
-  //   }
+  const [selectedPromo, setSelectedPromo] = useState<DataPromo | null>(null);
+  const {
+    isOpen: isViewPromoModalOpen,
+    onOpenChange: onViewPromoModalOpenChange,
+  } = useDisclosure();
+  const openPromoDetailsModal = (users: DataPromo) => {
+    setSelectedPromo(users);
+    onViewPromoModalOpenChange();
+  };
+  const onCloseKaryawanModal = () => {
+    setSelectedPromo(null);
+    onViewPromoModalOpenChange();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -120,26 +125,26 @@ export default function PromoTable() {
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
-  const renderCell = React.useCallback((promo: DataPromo, columnKey: React.Key) => {
+  const renderCell = React.useCallback(
+    (promo: DataPromo, columnKey: React.Key) => {
       const cellValue = promo[columnKey as keyof DataPromo];
-        
+
       switch (columnKey) {
-        case 'id': 
-            return <div className="text-center">{promo.id}</div>;
-        case 'kelipatan':
-            return <div className="text-center">{promo.bonus_poin}</div>;
-        case 'bonus_poin':
-            return <div className="text-center">{promo.kelipatan}</div>;
+        case "id":
+          return <div>{promo.id}</div>;
+        case "kelipatan":
+          return <div>{promo.bonus_poin}</div>;
+        case "bonus_poin":
+          return <div>{promo.kelipatan}</div>;
 
         case "actions":
           return (
-            <div className="relative flex items-center gap-4 justify-center">
+            <div className="relative flex items-center gap-4">
               <Tooltip
-                // onClick={() => openKaryawanDetailsModal(promo)}
                 content="Details"
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
-                <span className="text-xl text-blue-600 cursor-pointer active:opacity-50">
+                <span onClick={() => openPromoDetailsModal(promo)} className="text-xl text-blue-600 cursor-pointer active:opacity-50">
                   <IconFilledEye />
                 </span>
               </Tooltip>
@@ -160,7 +165,7 @@ export default function PromoTable() {
             </div>
           );
         default:
-          return cellValue as ReactNode
+          return cellValue as ReactNode;
       }
     },
     []
@@ -339,6 +344,12 @@ export default function PromoTable() {
           )}
         </TableBody>
       </Table>
+      <ViewPromoModal
+        isOpen={isViewPromoModalOpen}
+        onClose={onCloseKaryawanModal}
+        title="User Details"
+        promoData={selectedPromo}
+      />
     </div>
   );
 }

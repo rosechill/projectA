@@ -1,42 +1,38 @@
+'use client'
 import React from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@nextui-org/react'
-import { DataKaryawan } from '@/interfaces/KaryawanInterface'
+import { DataPromo } from '@/interfaces/PromoInterface'
 
 interface ViewModalProps {
   isOpen: boolean
   onClose: () => void
   title: string
-  karyawanData: DataKaryawan | null
+  promoData: DataPromo | null
 }
 
-const ViewPromoModal: React.FC<ViewModalProps> = ({ isOpen, onClose, title, karyawanData }) => {
+const ViewPromoModal: React.FC<ViewModalProps> = ({ isOpen, onClose, title, promoData }) => {
   if (!isOpen) return null
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader className="bg-[#0370C3] text-primary-50 justify-center">{title}</ModalHeader>
         <ModalBody>
-          {karyawanData && (
+          {promoData && (
             <div className="flex flex-col gap-2 pt-2">
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Id Gps</p>
+                <p className="w-[125px] font-semibold">Id Promo</p>
                 <p>: </p>
-                <p>{karyawanData.id}</p>
+                <p>{promoData.id}</p>
               </div>
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Id Device Vehicle</p>
+                <p className="w-[125px] font-semibold">Bonus Poin</p>
                 <p>: </p>
-                <p>{karyawanData.jabatan.id}</p>
+                <p>{promoData.bonus_poin}</p>
               </div>
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Id Device Vehicle</p>
+                <p className="w-[125px] font-semibold">Kelipatan</p>
                 <p>: </p>
-                <p>{karyawanData.jabatan.name}</p>
-              </div>
-              <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Longitude</p>
-                <p>: </p>
-                <p>{karyawanData.name}</p>
+                <p>{promoData.kelipatan}</p>
               </div>
             </div>
           )}
