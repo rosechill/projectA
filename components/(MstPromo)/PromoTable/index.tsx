@@ -33,6 +33,8 @@ import { columns } from "@/utils/columnsTable/dataPromo";
 import apiGetPromo from "@/service/api/apiPromo";
 import ViewPromoModal from "../ViewPromoModal";
 import AddPromoModal from "../AddPromoModal";
+import DeletePromoModal from "../DeletePromoModal";
+import EditPromoModal from "../EditPromoModal";
 const INITIAL_VISIBLE_COLUMNS = ["id", "kelipatan", "bonus_poin", "actions"];
 
 export default function PromoTable() {
@@ -54,24 +56,47 @@ export default function PromoTable() {
   //handlerModal
 
   //add Modal
+  const [selectedPromo, setSelectedPromo] = useState<DataPromo | null>(null);
   const {
     isOpen: isAddPromoModalOpen,
     onOpenChange: onAddPromoModalOpenChange,
   } = useDisclosure();
-
-  const [selectedPromo, setSelectedPromo] = useState<DataPromo | null>(null);
   const {
     isOpen: isViewPromoModalOpen,
     onOpenChange: onViewPromoModalOpenChange,
   } = useDisclosure();
+  const {
+    isOpen: isDeletePromoModalOpen,
+    onOpenChange: onDeletePromoModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isEditPromoModalOpen,
+    onOpenChange: onEditPromoModalOpenChange,
+  } = useDisclosure();
 
-  const openPromoDetailsModal = (users: DataPromo) => {
-    setSelectedPromo(users);
+  const openPromoDetailsModal = (promos: DataPromo) => {
+    setSelectedPromo(promos);
     onViewPromoModalOpenChange();
+  };
+  const openPromoDeleteModal = (promos: DataPromo) => {
+    setSelectedPromo(promos);
+    onDeletePromoModalOpenChange();
+  };
+  const openPromoEditModal = (promos: DataPromo) => {
+    setSelectedPromo(promos);
+    onEditPromoModalOpenChange();
   };
   const onCloseDetailPromoModal = () => {
     setSelectedPromo(null);
     onViewPromoModalOpenChange();
+  };
+  const onCloseDeletePromoModal = () => {
+    setSelectedPromo(null);
+    onDeletePromoModalOpenChange();
+  };
+  const onCloseEditPromoModal = () => {
+    setSelectedPromo(null);
+    onEditPromoModalOpenChange();
   };
 
   useEffect(() => {
@@ -163,14 +188,14 @@ export default function PromoTable() {
               <Tooltip
                 color="success"
                 className="p-1.5 rounded-lg border border-white"
-                content="Edit user"
+                content="Edit promo"
               >
-                <span className="text-xl text-success cursor-pointer active:opacity-50">
+                <span onClick={() => openPromoEditModal(promo)} className="text-xl text-success cursor-pointer active:opacity-50">
                   <IconEdit />
                 </span>
               </Tooltip>
-              <Tooltip color="danger" className="p-1.5" content="Delete user">
-                <span className="text-xl text-danger cursor-pointer active:opacity-50">
+              <Tooltip color="danger" className="p-1.5" content="Delete promo">
+                <span onClick={() => openPromoDeleteModal(promo)}  className="text-xl text-danger cursor-pointer active:opacity-50">
                   <IconDelete />
                 </span>
               </Tooltip>
@@ -357,12 +382,28 @@ export default function PromoTable() {
           )}
         </TableBody>
       </Table>
-      <AddPromoModal isOpen={isAddPromoModalOpen} onClose={onAddPromoModalOpenChange} title="Add User" />
+      <AddPromoModal
+        isOpen={isAddPromoModalOpen}
+        onClose={onAddPromoModalOpenChange}
+        title="Add Promo"
+      />
       <ViewPromoModal
         isOpen={isViewPromoModalOpen}
         onClose={onCloseDetailPromoModal}
-        title="User Details"
+        title="Promo Details"
         promoData={selectedPromo}
+      />
+      <DeletePromoModal
+        isOpen={isDeletePromoModalOpen}
+        onClose={onCloseDeletePromoModal}
+        title="Delete Promo Confirmation"
+        promoData={selectedPromo}   
+      />
+      <EditPromoModal
+        isOpen={isEditPromoModalOpen}
+        onClose={onCloseEditPromoModal}
+        title="Delete Promo Confirmation"
+        promoData={selectedPromo}   
       />
     </div>
   );
