@@ -6,7 +6,7 @@ export async function create(key: string, value: string) {
   return setCookies;
 }
 
-export async function read(key: string) {
+export function read(key: string) {
   const getCookies = cookies().get(key)?.value;
   return getCookies;
 }

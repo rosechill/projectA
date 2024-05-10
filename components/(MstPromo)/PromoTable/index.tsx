@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, ReactNode } from "react";
 import {
   Table,
@@ -21,7 +20,6 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import apiGetKaryawan from "@/service/api/apiUser";
-import { columns } from "@/utils/columnsTable/dataUser";
 import {
   PlusIcon,
   ChevronDownIcon,
@@ -31,11 +29,12 @@ import {
   IconDelete,
 } from "@/assets/icons";
 import { capitalize } from "@/utils/capitalize";
-import { DataKaryawan } from "@/interfaces/KaryawanInterface";
-const INITIAL_VISIBLE_COLUMNS = ["id", "name", "jabatan", "actions"];
+import { DataPromo } from "@/interfaces/PromoInterface";
+import { columns } from "@/utils/columnsTable/dataPromo";
+import apiGetPromo from "@/service/api/apiPromo";
+const INITIAL_VISIBLE_COLUMNS = ["id", "kelipatan", "bonus_poin", "actions"];
 
 export default function PromoTable() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -48,16 +47,28 @@ export default function PromoTable() {
   });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  
-  const [users, setUsers] = useState<DataKaryawan[]>([]);
+
+  const [promos, setPromos] = useState<DataPromo[]>([]);
+  //handlerModal
+  //   const [selectedKaryawan, setSelectedKaryawan] = useState<DataPromo | null>(null)
+  //   const { isOpen: isViewKaryawanModalOpen, onOpenChange: onViewKaryawanModalOpenChange } = useDisclosure()
+  //   const openKaryawanDetailsModal = (users: DataPromo) => {
+  //     setSelectedKaryawan(users)
+  //     onViewKaryawanModalOpenChange()
+  //   }
+  //   const onCloseKaryawanDeviceModal = () => {
+  //     setSelectedKaryawan(null)
+  //     onViewKaryawanModalOpenChange()
+  //   }
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await apiGetKaryawan();
-        console.log("response", response.data.data);
-        setUsers(response.data.data);
+        const response = await apiGetPromo();
+        // console.log(response.data.data);
+        setPromos(response.data.data);
       } catch (error) {
+        // console.log(error)
         setLoading(true);
       } finally {
         setLoading(false);
@@ -66,7 +77,7 @@ export default function PromoTable() {
     fetchData();
   }, []);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(promos.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -79,16 +90,19 @@ export default function PromoTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredPromos = [...promos];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredPromos = filteredPromos.filter((user) =>
+        user.bonus_poin
+          .toString()
+          .toLowerCase()
+          .includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue]);
+    return filteredPromos;
+  }, [promos, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -98,30 +112,30 @@ export default function PromoTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: DataKaryawan, b: DataKaryawan) => {
-      const first = a[sortDescriptor.column as keyof DataKaryawan] as number;
-      const second = b[sortDescriptor.column as keyof DataKaryawan] as number;
+    return [...items].sort((a: DataPromo, b: DataPromo) => {
+      const first = a[sortDescriptor.column as keyof DataPromo] as number;
+      const second = b[sortDescriptor.column as keyof DataPromo] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
-
-  const renderCell = React.useCallback(
-    (user: DataKaryawan, columnKey: React.Key): ReactNode => {
-      const cellValue = user[columnKey as keyof DataKaryawan];
-
+  const renderCell = React.useCallback((promo: DataPromo, columnKey: React.Key) => {
+      const cellValue = promo[columnKey as keyof DataPromo];
+        
       switch (columnKey) {
-        case "id":
-          return <div>{user.id}</div>;
-        case "name":
-          return <div>{user.name}</div>;
-        case "jabatan":
-          return <div>{user.jabatan.name}</div>;
+        case 'id': 
+            return <div className="text-center">{promo.id}</div>;
+        case 'kelipatan':
+            return <div className="text-center">{promo.bonus_poin}</div>;
+        case 'bonus_poin':
+            return <div className="text-center">{promo.kelipatan}</div>;
+
         case "actions":
           return (
-            <div className="relative flex items-center gap-4">
+            <div className="relative flex items-center gap-4 justify-center">
               <Tooltip
+                // onClick={() => openKaryawanDetailsModal(promo)}
                 content="Details"
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
@@ -146,7 +160,7 @@ export default function PromoTable() {
             </div>
           );
         default:
-          return cellValue as ReactNode;
+          return cellValue as ReactNode
       }
     },
     []
@@ -225,7 +239,7 @@ export default function PromoTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className=" text-medium">Total {users.length} users</span>
+          <span className=" text-medium">Total {promos.length} Promos</span>
           <label className="flex items-center text-medium">
             Rows per page:
             <select
@@ -244,7 +258,7 @@ export default function PromoTable() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    promos.length,
     hasSearchFilter,
   ]);
 
