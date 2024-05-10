@@ -17,6 +17,10 @@ export const dataMenu: DataMenu[] = [
 
 export const dataMenuAdmin: DataMenu[] = [
   {
+    name: "admin",
+    path: "/admin",
+  },
+  {
     name: "mstUser",
     path: "/mstUser",
   },
@@ -43,6 +47,10 @@ export const dataMenuAdmin: DataMenu[] = [
 ];
 
 export const dataMenuMO: DataMenu[] = [
+  {
+    name: "mo", 
+    path: "/mo",
+  },
   {
     name: "mstJabatan", 
     path: "/mstJabatan",
@@ -71,6 +79,10 @@ export const dataMenuMO: DataMenu[] = [
 
 export const dataMenuCustomer: DataMenu[] = [
   {
+    name: "user", 
+    path: "/user",
+  },
+  {
     name: "userProfile", 
     path: "/userProfile",
   },
@@ -81,6 +93,10 @@ export const dataMenuCustomer: DataMenu[] = [
 ];
 
 export const dataMenuOwner: DataMenu[] = [
+  {
+    name: "owner", 
+    path: "/owner",
+  },
   {
     name: "mstJabatan", 
     path: "/mstJabatan",

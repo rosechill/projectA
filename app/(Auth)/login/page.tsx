@@ -1,5 +1,6 @@
 import { AtmaKitchen, PeopleLogin } from "@/assets/images";
 import LoginForm from "@/components/LoginForm";
+import { roleToken } from "@/store/cookies";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,7 +22,7 @@ export default function Login() {
         <div className="flex flex-col gap-4">
           <h2 className="text-3xl font-bold">Selamat Datang Kembali!</h2>
           <h2>Mohon isi kembali data anda</h2>
-          <LoginForm />
+          <LoginForm/>
           <h1 className="pb-4 w-3/4 text-center">Belum punya akun? <Link href="/daftar" className="font-semibold">daftar</Link></h1>
         </div>
       </div>

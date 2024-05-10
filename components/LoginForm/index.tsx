@@ -47,8 +47,10 @@ export default function LoginForm() {
     apiLogin(body)
     .then(res => {
       setItem('__DATA__', JSON.stringify(res))
+      // console.log(res)
+      // console.log(res.data.data.role)
       toast('Login success')
-      router.push('/')
+      router.push(`/${res.data.data.role}`)
     })
     .catch(() => {
       toast.error('Login failed')
