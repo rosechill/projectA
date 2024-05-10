@@ -5,7 +5,7 @@ import { create } from "@/store/cookies";
 
 const apiLogin = async (body: { email: string; password: string }) =>
   await satellite
-    .post('http://127.0.0.1:8000/api/auth/login', body, {
+    .post('https://jurwawe.sga.dom.my.id/api/auth/login', body, {
       headers: {
         'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
         'X-Content-Type-Options': 'nosniff',
