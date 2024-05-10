@@ -13,10 +13,10 @@ const apiGetKaryawan = () => {
 
   userAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/karyawan/alltantok`, {
-        // headers: {
-        //   Authorization: `Bearer ${read('__TOKEN__')}`,
-        // },
+      .get(`https://jurwawe.sga.dom.my.id/api/karyawan/index`, {
+        headers: {
+          Authorization: `Bearer ${read('__TOKEN__')}`,
+        },
       })
       .then((response: { data: DataKaryawan }) => {
         const storageData = response.data

@@ -45,7 +45,7 @@ export default function Container({
               {matchedMenu === "customer" && <MenuAdmin role={role} />}
               {matchedMenu === "owner" && <MenuAdmin role={role} />}
               <div className="flex-1">
-                <Header />
+                <Header role={role} />
                 <div className="flex-1">{children}</div>
               </div>
             </div>

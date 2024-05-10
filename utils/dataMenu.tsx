@@ -79,8 +79,8 @@ export const dataMenuMO: DataMenu[] = [
 
 export const dataMenuCustomer: DataMenu[] = [
   {
-    name: "user", 
-    path: "/user",
+    name: "customer", 
+    path: "/customer",
   },
   {
     name: "userProfile", 

@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function customer() {
+export default function mstCustomer() {
   return (
-    <div>customer</div>
+    <div>mstCustomer</div>
   )
 }

@@ -41,10 +41,12 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
   };
 
   const handleLogout = () => {
-    document.cookie = '__TOKEN__=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-    document.cookie = '__ROLE__=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-    window.location.href = '/login'
-  }
+    document.cookie =
+      "__TOKEN__=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "__ROLE__=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/login";
+  };
 
   // const menuHeader = role === 'admin' ? dataMenuAdmin : dataMenuMO
   const menuHeader = () => {
@@ -53,7 +55,7 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
     } else if (role === "mo") {
       return dataMenuMO;
     } else if (role === "owner") {
-    return dataMenuOwner;
+      return dataMenuOwner;
     } else return dataMenuCustomer;
   };
   return (
@@ -63,33 +65,40 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
       }`}
     >
       <div className="">
-      {isOpen && (
-        <div className="w-[300px] min-w-[300px]  will-change-transform flex flex-col justify-between h-full ">
-          <div className="">
-            <div className="flex justify-center items-center h-[10vh] ">
-              <Image src={AtmaKitchen} alt="logo" width={200} height={50} />
+        {isOpen && (
+          <>
+            <div className="w-[300px] min-w-[300px]  will-change-transform flex flex-col justify-between h-full ">
+              <div className="">
+                <div className="flex justify-center items-center h-[10vh] ">
+                  <Image src={AtmaKitchen} alt="logo" width={200} height={50} />
+                </div>
+                <ul className="px-6 items-center flex-col">
+                  {menuHeader().map((item, index) => (
+                    <ListMenu
+                      key={index}
+                      item={item}
+                      index={index}
+                      pathName={pathName}
+                    />
+                  ))}
+                </ul>
+              </div>
             </div>
-            <ul className="px-6 items-center flex-col">
-            {menuHeader().map((item, index) => ( 
-              <ListMenu
-                key={index}
-                item={item}
-                index={index}
-                pathName={pathName}
-              />
-            ))}
-            </ul>
-          </div>
-        </div>
-      )}
-      <div className="px-12 w-full flex items-end h-full">
-        <Button onClick={handleLogout} color="danger" size="lg" className="w-full">
-          Logout
-        </Button>
+            <div className="px-12 w-full flex items-end h-full">
+              <Button
+                onClick={handleLogout}
+                color="danger"
+                size="lg"
+                className="w-full"
+              >
+                Logout
+              </Button>
+            </div>
+          </>
+        )}
       </div>
-      </div>
-      <button  onClick={toggleMenu} className="absolute top-8 -right-9 z-10">
-        {isOpen ? <IconClose /> : <IconHamburger />}
+      <button onClick={toggleMenu} className="absolute top-8 -right-9 z-10 text-white">
+        {isOpen ? <IconClose  /> : <IconHamburger />}
       </button>
     </div>
   );
