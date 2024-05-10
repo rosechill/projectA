@@ -1,6 +1,6 @@
 'use server'
 
-import { DataPromo } from '@/interfaces/PromoInterface'
+import { DataPromo, DataPromoForm } from '@/interfaces/PromoInterface'
 import satellite from '@/service/satellite'
 import { read } from '@/store/cookies'
 
@@ -34,3 +34,18 @@ const apiGetPromo = () => {
 }
 
 export default apiGetPromo
+
+
+export const apiCreatePromo = async (body: DataPromoForm) => {
+    await satellite
+      .post(`https://jurwawe.sga.dom.my.id/api/promo-poin/store`, body, {
+        headers: {
+          Authorization: `Bearer ${read('__TOKEN__')}`,
+        },
+      })
+      .catch(err => {
+        throw err.response.data
+      })
+      .then(() => {})
+    return apiCreatePromo
+  }

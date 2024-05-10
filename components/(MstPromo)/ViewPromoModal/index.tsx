@@ -38,7 +38,7 @@ const ViewPromoModal: React.FC<ViewModalProps> = ({ isOpen, onClose, title, prom
           )}
         </ModalBody>
         <ModalFooter>
-          <Button className="border-1 border-[#0370C3] bg-primary min-w-[100px]" variant="flat" size="md" onClick={onClose}>
+          <Button className="border-1 border-[#0370C3] bg-primary min-w-[100px] text-white" variant="flat" size="md" onClick={onClose}>
             Close
           </Button>
         </ModalFooter>

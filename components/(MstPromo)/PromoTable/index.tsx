@@ -19,7 +19,6 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import apiGetKaryawan from "@/service/api/apiUser";
 import {
   PlusIcon,
   ChevronDownIcon,
@@ -33,6 +32,7 @@ import { DataPromo } from "@/interfaces/PromoInterface";
 import { columns } from "@/utils/columnsTable/dataPromo";
 import apiGetPromo from "@/service/api/apiPromo";
 import ViewPromoModal from "../ViewPromoModal";
+import AddPromoModal from "../AddPromoModal";
 const INITIAL_VISIBLE_COLUMNS = ["id", "kelipatan", "bonus_poin", "actions"];
 
 export default function PromoTable() {
@@ -50,17 +50,26 @@ export default function PromoTable() {
   const [loading, setLoading] = useState(true);
 
   const [promos, setPromos] = useState<DataPromo[]>([]);
+
   //handlerModal
+
+  //add Modal
+  const {
+    isOpen: isAddPromoModalOpen,
+    onOpenChange: onAddPromoModalOpenChange,
+  } = useDisclosure();
+
   const [selectedPromo, setSelectedPromo] = useState<DataPromo | null>(null);
   const {
     isOpen: isViewPromoModalOpen,
     onOpenChange: onViewPromoModalOpenChange,
   } = useDisclosure();
+
   const openPromoDetailsModal = (users: DataPromo) => {
     setSelectedPromo(users);
     onViewPromoModalOpenChange();
   };
-  const onCloseKaryawanModal = () => {
+  const onCloseDetailPromoModal = () => {
     setSelectedPromo(null);
     onViewPromoModalOpenChange();
   };
@@ -144,7 +153,10 @@ export default function PromoTable() {
                 content="Details"
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
-                <span onClick={() => openPromoDetailsModal(promo)} className="text-xl text-blue-600 cursor-pointer active:opacity-50">
+                <span
+                  onClick={() => openPromoDetailsModal(promo)}
+                  className="text-xl text-blue-600 cursor-pointer active:opacity-50"
+                >
                   <IconFilledEye />
                 </span>
               </Tooltip>
@@ -235,6 +247,7 @@ export default function PromoTable() {
               </DropdownMenu>
             </Dropdown>
             <Button
+              onClick={onAddPromoModalOpenChange}
               className="bg-[#0370C3] text-background"
               endContent={<PlusIcon />}
               size="md"
@@ -344,9 +357,10 @@ export default function PromoTable() {
           )}
         </TableBody>
       </Table>
+      <AddPromoModal isOpen={isAddPromoModalOpen} onClose={onAddPromoModalOpenChange} title="Add User" />
       <ViewPromoModal
         isOpen={isViewPromoModalOpen}
-        onClose={onCloseKaryawanModal}
+        onClose={onCloseDetailPromoModal}
         title="User Details"
         promoData={selectedPromo}
       />
