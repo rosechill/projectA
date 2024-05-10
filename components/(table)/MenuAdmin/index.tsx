@@ -1,44 +1,59 @@
-'use client'
+"use client";
 
-import { dataMenu, dataMenuAdmin, dataMenuMO } from '@/utils/dataMenu'
-// import { MENU_HEADER_1, MENU_HEADER_2 } from '@utils/list'
-import Image from 'next/image'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import ListMenu from '../../ListMenu'
-import { IconClose, IconHamburger } from '@/assets/icons'
-import { AtmaKitchen } from '@/assets/images'
+import {
+  dataMenu,
+  dataMenuAdmin,
+  dataMenuCustomer,
+  dataMenuMO,
+  dataMenuOwner,
+} from "@/utils/dataMenu";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import ListMenu from "../../ListMenu";
+import { IconClose, IconHamburger } from "@/assets/icons";
+import { AtmaKitchen } from "@/assets/images";
 
 export default function MenuAdmin({ role }: { readonly role: string }) {
-  const pathName = usePathname()
-  const [isOpen, setIsOpen] = useState(true)
+  const pathName = usePathname();
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1300) {
-        setIsOpen(false)
+        setIsOpen(false);
       } else {
-        setIsOpen(true)
+        setIsOpen(true);
       }
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  if (pathName === '/login') {
-    return null
+  if (pathName === "/login") {
+    return null;
   }
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
-  const menuHeader = role === '1' ? dataMenuAdmin : dataMenuMO
-
+  // const menuHeader = role === 'admin' ? dataMenuAdmin : dataMenuMO
+  const menuHeader = () => {
+    if (role === "admin") {
+      return dataMenuAdmin;
+    } else if (role === "mo") {
+      return dataMenuMO;
+    } else if (role === "owner") {
+    return dataMenuOwner;
+    } else return dataMenuCustomer;
+  };
   return (
     <div
-      className={`flex flex-col sticky top-0 bg-[#dcd9d9] will-change-transform h-screen  ${isOpen ? 'open-animation' : 'close-animation'}`}
+      className={`flex flex-col sticky top-0 bg-[#dcd9d9] will-change-transform h-screen  ${
+        isOpen ? "open-animation" : "close-animation"
+      }`}
     >
       {isOpen && (
         <div className="w-[300px] min-w-[300px]  will-change-transform flex flex-col justify-between h-full ">
@@ -47,9 +62,14 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
               <Image src={AtmaKitchen} alt="logo" width={200} height={50} />
             </div>
             <ul className="px-6 items-center flex-col">
-              {menuHeader.map((item, index) => (
-                <ListMenu key={index} item={item} index={index} pathName={pathName} />
-              ))}
+            {menuHeader().map((item, index) => ( 
+              <ListMenu
+                key={index}
+                item={item}
+                index={index}
+                pathName={pathName}
+              />
+            ))}
             </ul>
           </div>
         </div>
@@ -58,5 +78,5 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
         {isOpen ? <IconClose /> : <IconHamburger />}
       </button>
     </div>
-  )
+  );
 }

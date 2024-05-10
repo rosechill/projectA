@@ -1,6 +1,5 @@
 export interface DataRegister {
-    nama: string,
+    name: string,
     email: string,
     password: string,
-    numberPhone: string,
 }

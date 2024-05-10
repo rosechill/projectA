@@ -8,13 +8,18 @@ import { Button, Input } from "@nextui-org/react";
 import { DataLogin } from "@/interfaces/LoginInterface";
 import { IconFilledEye, IconFilledEyeSlash } from "@/assets/icons";
 import Link from "next/link";
-
+import apiLogin from "@/service/api/apiLogin";
+import { setItem } from "@/store/storage";
+import { useRouter } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const schema = yup.object({
   email: yup.string().required("Email harus diisi"),
   password: yup.string().required("Password harus diisi"),
 });
 
 export default function LoginForm() {
+  const router = useRouter()
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -29,12 +34,29 @@ export default function LoginForm() {
 
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     formState: { errors, isValid },
   } = form;
 
+  const onSubmitted = (data: DataLogin) => {
+    const body = {
+      email: data.email,
+      password: data.password,
+    };
+
+    apiLogin(body)
+    .then(res => {
+      setItem('__DATA__', JSON.stringify(res))
+      toast('Login success')
+      router.push('/')
+    })
+    .catch(() => {
+      toast.error('Login failed')
+    })
+  };
   return (
-    <form action="/" className="w-full flex flex-col gap-8 pt-4 ">
+    <form onSubmit={handleSubmit(onSubmitted)} className="w-full flex flex-col gap-8 pt-4 ">
+      <ToastContainer />
       <div className="relative">
         <Input
           {...register("email")}

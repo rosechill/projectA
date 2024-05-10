@@ -21,12 +21,12 @@ export const dataMenuAdmin: DataMenu[] = [
     path: "/mstUser",
   },
   {
-    name: "mstProduk",
-    path: "/mstProduk",
-  },
-  {
     name: "mstPromo",
     path: "/mstPromo",
+  },
+  {
+    name: "mstProduk",
+    path: "/mstProduk",
   },
   {
     name: "mstResep",
@@ -40,39 +40,53 @@ export const dataMenuAdmin: DataMenu[] = [
     name: "mstHampers",
     path: "/mstHampers",
   },
-  {
-    name: "mstJabatan",
-    path: "/mstJabatan",
-  },
-  {
-    name: "mstKaryawan",
-    path: "/mstKaryawan",
-  },
-  {
-    name: "mstPenitip",
-    path: "/mstPenitip",
-  },
-  {
-    name: "mstPembelianBahanBuku",
-    path: "/mstPembelianBahanBuku",
-  },
-  {
-    name: "mstPengeluaranLain",
-    path: "/mstPengeluaranLain",
-  },
-  {
-    name: "mstPresensi",
-    path: "/mstPresensi",
-  },
-]
+];
 
 export const dataMenuMO: DataMenu[] = [
   {
-    name: "mstUser",
-    path: "/mstUser",
+    name: "mstJabatan", 
+    path: "/mstJabatan",
   },
   {
-    name: "mstProduk",
-    path: "/mstProduk",
+    name: "mstKaryawan", 
+    path: "/mstKaryawan",
   },
-]
+  {
+    name: "mstPenitip", 
+    path: "/mstPenitip",
+  },
+  {
+    name: "mstPembelianBahanBuku", 
+    path: "/mstPembelianBahanBuku",
+  },
+  {
+    name: "mstPengeluaranLain", 
+    path: "/mstPengeluaranLain",
+  },
+  {
+    name: "mstPresensi", 
+    path: "/mstPresensi",
+  },
+];
+
+export const dataMenuCustomer: DataMenu[] = [
+  {
+    name: "userProfile", 
+    path: "/userProfile",
+  },
+  {
+    name: "alamat", 
+    path: "/alamat",
+  },
+];
+
+export const dataMenuOwner: DataMenu[] = [
+  {
+    name: "mstJabatan", 
+    path: "/mstJabatan",
+  },
+  {
+    name: "mstKaryawan", 
+    path: "/mstKaryawan",
+  },
+];

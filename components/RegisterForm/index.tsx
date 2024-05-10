@@ -6,23 +6,25 @@ import { useForm } from "react-hook-form";
 import { Button, Input } from "@nextui-org/react";
 import { DataRegister } from "@/interfaces/RegisterInterface";
 import Link from "next/link";
+import apiRegister from "@/service/api/apiRegister";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
 
 const schema = yup.object({
-  nama: yup.string().required("Nama harus diisi"),
+  name: yup.string().required("Nama harus diisi"),
   email: yup.string().required("Email harus diisi"),
   password: yup.string().required("Password harus diisi"),
-  numberPhone: yup.string().required("Number phone harus diisi"),
 });
 export default function RegisterForm() {
-  const [isVisible, setIsVisible] = useState(false);
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const router = useRouter();
 
+  const [isVisible, setIsVisible] = useState(false);
   const form = useForm<DataRegister>({
     defaultValues: {
-      nama: "",
+      name: "",
       email: "",
       password: "",
-      numberPhone: "",
     },
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -30,15 +32,40 @@ export default function RegisterForm() {
 
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     formState: { errors, isValid },
   } = form;
 
+  const onSubmitted = (data: DataRegister) => {
+    const body = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+
+    apiRegister(body)
+      .then((res) => {
+        console.log(res);
+        if (res.status === "status") {
+          toast("Register success");
+          router.push("/login");
+        } else {
+          toast.error(res.data.message); 
+        }
+      })
+      .catch(() => {
+        toast.error("Register failed");
+      });
+  };
   return (
-    <form action="/login" className="w-full flex flex-col gap-8 pt-4 ">
+    <form
+      onSubmit={handleSubmit(onSubmitted)}
+      className="w-full flex flex-col gap-8 pt-4 "
+    >
+      <ToastContainer />
       <div className="relative">
         <Input
-          {...register("nama")}
+          {...register("name")}
           size="lg"
           radius="sm"
           color="default"
@@ -53,7 +80,7 @@ export default function RegisterForm() {
           *
         </span>
         <p className="ms-3 text-sm pt-1 text-red-500 min-h-[20px] absolute ">
-          {errors.nama?.message}
+          {errors.name?.message}
         </p>
       </div>
       <div className="relative">
@@ -94,26 +121,6 @@ export default function RegisterForm() {
         </span>
         <p className="ms-3 text-sm pt-1 text-red-500 min-h-[20px] absolute ">
           {errors.password?.message}
-        </p>
-      </div>
-      <div className="relative">
-        <Input
-          {...register("numberPhone")}
-          size="lg"
-          radius="sm"
-          color="default"
-          variant="bordered"
-          type="text"
-          labelPlacement="outside"
-          placeholder="Masukkan number phone"
-          label="Number Phone"
-          className="w-3/4"
-        />
-        <span className="text-red-500 font-bold text-xl absolute -top-1 left-32">
-          *
-        </span>
-        <p className="ms-3 text-sm pt-1 text-red-500 min-h-[20px] absolute ">
-          {errors.numberPhone?.message}
         </p>
       </div>
       <Link href={"/login"}>
