@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, ReactNode } from "react";
 import {
   Table,
@@ -21,24 +20,6 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Checkbox,
-  Link,
-} from "@nextui-org/react";
-
-// import { UserInterface } from '@interfaces/userInterface'
-
-// import apiGetUserAccount from '@services/api/apiUser'
-import apiGetKaryawan from "@/service/api/apiUser";
-
-// import { columns } from '@/utils/columnsTable/dataUser'
-
-import { columns } from "@/utils/columnsTable/dataUser";
-import {
   PlusIcon,
   ChevronDownIcon,
   SearchIcon,
@@ -48,10 +29,13 @@ import {
 } from "@/assets/icons";
 import { capitalize } from "@/utils/capitalize";
 import { DataKaryawan } from "@/interfaces/KaryawanInterface";
+import { columns } from "@/utils/columnsTable/dataKaryawan";
+import apiGetKaryawan from "@/service/api/apiKaryawan";
+import ViewKaryawanModal from "../ViewKaryawanModal";
+
 const INITIAL_VISIBLE_COLUMNS = ["id", "name", "jabatan", "actions"];
 
-export default function UserTable() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+export default function KaryawanTable() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -64,19 +48,30 @@ export default function UserTable() {
   });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [karyawans, setKaryawans] = useState<DataKaryawan[]>([]);
 
-  //
-  const [statusFilter, setStatusFilter] = React.useState("all");
-
-  const [users, setUsers] = useState<DataKaryawan[]>([]);
+  const [selectedKaryawan, setSelectedKaryawan] = useState<DataKaryawan | null>(
+    null
+  );
+  const {
+    isOpen: isViewKaryawanModalOpen,
+    onOpenChange: onViewKaryawanModalOpenChange,
+  } = useDisclosure();
+  const openKaryawanDetailsModal = (karyawans: DataKaryawan) => {
+    setSelectedKaryawan(karyawans);
+    onViewKaryawanModalOpenChange();
+  };
+  const onCloseKaryawanModal = () => {
+    setSelectedKaryawan(null);
+    onViewKaryawanModalOpenChange();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await apiGetKaryawan();
-        console.log("response", response.data.data);
-        setUsers(response.data.data);
+        setKaryawans(response.data.data);
       } catch (error) {
         setLoading(true);
       } finally {
@@ -86,7 +81,7 @@ export default function UserTable() {
     fetchData();
   }, []);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(karyawans.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -99,16 +94,16 @@ export default function UserTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredKaryawans = [...karyawans];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredKaryawans = filteredKaryawans.filter((karyawan) =>
+        karyawan.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue]);
+    return filteredKaryawans;
+  }, [karyawans, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -128,16 +123,16 @@ export default function UserTable() {
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback(
-    (user: DataKaryawan, columnKey: React.Key): ReactNode => {
-      const cellValue = user[columnKey as keyof DataKaryawan];
+    (karyawan: DataKaryawan, columnKey: React.Key): ReactNode => {
+      const cellValue = karyawan[columnKey as keyof DataKaryawan];
 
       switch (columnKey) {
         case "id":
-          return <div>{user.id}</div>;
+          return <div>{karyawan.id}</div>;
         case "name":
-          return <div>{user.name}</div>;
+          return <div>{karyawan.name}</div>;
         case "jabatan":
-          return <div>{user.jabatan.name}</div>;
+          return <div>{karyawan.jabatan.name}</div>;
         case "actions":
           return (
             <div className="relative flex items-center gap-4">
@@ -145,20 +140,27 @@ export default function UserTable() {
                 content="Details"
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
-                <span className="text-xl text-blue-600 cursor-pointer active:opacity-50">
+                <span
+                  onClick={() => openKaryawanDetailsModal(karyawan)}
+                  className="text-xl text-blue-600 cursor-pointer active:opacity-50"
+                >
                   <IconFilledEye />
                 </span>
               </Tooltip>
               <Tooltip
                 color="success"
                 className="p-1.5 rounded-lg border border-white"
-                content="Edit user"
+                content="Edit Karyawan"
               >
                 <span className="text-xl text-success cursor-pointer active:opacity-50">
                   <IconEdit />
                 </span>
               </Tooltip>
-              <Tooltip color="danger" className="p-1.5" content="Delete user">
+              <Tooltip
+                color="danger"
+                className="p-1.5"
+                content="Delete Karyawan"
+              >
                 <span className="text-xl text-danger cursor-pointer active:opacity-50">
                   <IconDelete />
                 </span>
@@ -245,7 +247,9 @@ export default function UserTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className=" text-medium">Total {users.length} users</span>
+          <span className=" text-medium">
+            Total {karyawans.length} Karyawan
+          </span>
           <label className="flex items-center text-medium">
             Rows per page:
             <select
@@ -264,7 +268,7 @@ export default function UserTable() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    karyawans.length,
     hasSearchFilter,
   ]);
 
@@ -311,11 +315,11 @@ export default function UserTable() {
   return (
     <div className="p-7">
       <div className="p-4 border border-gray-100 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold pb-4">Master User</h2>
+        <h2 className="text-2xl font-semibold pb-4">Master Karyawan</h2>
         <Table
           isCompact
           removeWrapper
-          aria-label="Data Table User"
+          aria-label="Data Table Karyawan"
           bottomContent={bottomContent}
           bottomContentPlacement="outside"
           classNames={classNames}
@@ -336,7 +340,7 @@ export default function UserTable() {
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No users found"} items={sortedItems}>
+          <TableBody emptyContent={"No Karyawan found"} items={sortedItems}>
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -346,6 +350,12 @@ export default function UserTable() {
             )}
           </TableBody>
         </Table>
+        <ViewKaryawanModal
+          isOpen={isViewKaryawanModalOpen}
+          onClose={onCloseKaryawanModal}
+          title="Karyawan Details"
+          karyawanData={selectedKaryawan}
+        />
       </div>
     </div>
   );
