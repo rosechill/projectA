@@ -8,10 +8,11 @@ import { toast, ToastContainer } from "react-toastify";
 import { DataProduk, DataProdukForm } from "@/interfaces/ProdukInterface";
 import { apiEditProduk } from "@/service/api/apiProduk";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 interface EditProdukForm {
   onClose: () => void;
-  produkData: any | null;
+  produkData: DataProduk | null;
 }
 
 const schema = yup.object({
@@ -35,9 +36,9 @@ const EditProdukForm: React.FC<EditProdukForm> = ({ produkData, onClose }) => {
       kategori: produkData?.kategori,
       kuota_harian: produkData?.kuota_harian,
       harga: produkData?.harga,
-      gambar: produkData?.gambar,
+      gambar: null,
     },
-    resolver: yupResolver(schema),
+    // resolver: yupResolver(schema),
     mode: "onChange",
   });
   const {
@@ -47,16 +48,17 @@ const EditProdukForm: React.FC<EditProdukForm> = ({ produkData, onClose }) => {
   } = form;
   const getId = produkData?.id;
   const onSubmitted = (produkData: any) => {
-    const produkDataHandler = produkData!;
     let form = new FormData();
-    form.append("gambar", produkData.gambar[0]);
+    if (produkData.gambar) {
+      form.append("gambar", produkData.gambar[0]);
+    }
     form.append("name", produkData.name);
     form.append("kategori", produkData.kategori);
     form.append("kuota_harian", produkData.kuota_harian);
     form.append("harga", produkData.harga);
-    console.log(produkDataHandler.id);
     console.log(produkData.id);
-    apiEditProduk(produkData.id, form as any)
+    console.log(getId)
+    apiEditProduk(getId as number, form as any)
       .then(() => {
         toast("Edit success");
         setTimeout(() => {
@@ -71,6 +73,7 @@ const EditProdukForm: React.FC<EditProdukForm> = ({ produkData, onClose }) => {
   return (
     <>
       <ToastContainer />
+      <div className="hidden">{produkData?.id}</div>
       <div className="flex flex-col justify-center">
         <h2 className="font-semibold">Masukkan data baru Produk:</h2>
         <form
@@ -134,6 +137,7 @@ const EditProdukForm: React.FC<EditProdukForm> = ({ produkData, onClose }) => {
             </p>
           </div>
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative items-center justify-center ">
+            <Image src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`} alt="Gambar" width={200} height={200}/>
             <input
               {...register("gambar")}
               type="file"

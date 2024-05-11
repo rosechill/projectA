@@ -2,6 +2,7 @@
 import React from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@nextui-org/react'
 import { DataProduk } from '@/interfaces/ProdukInterface'
+import Image from 'next/image'
 
 interface ViewModalProps {
   isOpen: boolean
@@ -49,6 +50,7 @@ const ViewProdukModal: React.FC<ViewModalProps> = ({ isOpen, onClose, title, pro
                 <p>: </p>
                 <p className='h-fit'>{produkData.gambar}</p>
               </div>
+              <Image src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`} alt="Gambar" width={300} height={300}/>
             </div>
           )}
         </ModalBody>
