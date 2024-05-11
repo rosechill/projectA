@@ -28,17 +28,24 @@ import {
   IconDelete,
 } from "@/assets/icons";
 import { capitalize } from "@/utils/capitalize";
-import { DataKaryawan } from "@/interfaces/KaryawanInterface";
-import { columns } from "@/utils/columnsTable/dataKaryawan";
-import apiGetKaryawan from "@/service/api/apiKaryawan";
-import ViewKaryawanModal from "../ViewKaryawanModal";
-import AddKaryawanModal from "../AddKaryawanModal";
-import EditKaryawanModal from "../EditKaryawanModal";
-import DeleteKaryawanModal from "../DeleteKaryawanModal";
+import apiGetProduk from "@/service/api/apiProduk";
+import AddProdukTitipanModal from "../AddProdukTitipanModal";
+import ViewProdukTitipanModal from "../ViewProdukTitipanModal";
+import { DataProdukTitipan } from "@/interfaces/ProdukTitipanInterface";
+import { columns } from "@/utils/columnsTable/dataProdukTitipan";
+import apiGetProdukTitipan, { apiGetProdukTitipanPenitip } from "@/service/api/apiProdukTitipan";
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "name", "jabatan", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "id",
+  "penitip_id",
+  "name",
+  "harga",
+  "kategori",
+  "gambar",
+  "actions",
+];
 
-export default function KaryawanTable() {
+export default function ProdukTitipanTable() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -51,75 +58,53 @@ export default function KaryawanTable() {
   });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [karyawans, setKaryawans] = useState<DataKaryawan[]>([]);
 
+  const [produks, setProduks] = useState<DataProdukTitipan[]>([]);
+
+  const [dataPenitip, setDataPenitip] = useState<any[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiGetProdukTitipanPenitip ();
+        setDataPenitip(response.data.data);
+      } catch (error) {
+        //
+      } 
+    };
+    fetchData();
+  }, []);
+    // console.log(dataPenitip);
+  //add Modal
+  const [selectedProduk, setSelectedProduk] =
+    useState<DataProdukTitipan | null>(null);
   const {
-    isOpen: isAddKaryawanModalOpen,
-    onOpenChange: onAddKaryawanModalOpenChange,
+    isOpen: isAddProdukModalOpen,
+    onOpenChange: onAddProdukModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isViewProdukModalOpen,
+    onOpenChange: onViewProdukModalOpenChange,
   } = useDisclosure();
 
-  const [selectedKaryawan, setSelectedKaryawan] = useState<DataKaryawan | null>(
-    null
-  );
-  // View Karyawan Modal
-  const {
-    isOpen: isViewKaryawanModalOpen,
-    onOpenChange: onViewKaryawanModalOpenChange,
-  } = useDisclosure();
-
-  // Open Karyawan Details Modal
-  const openKaryawanDetailsModal = (karyawans: DataKaryawan) => {
-    setSelectedKaryawan(karyawans);
-    onViewKaryawanModalOpenChange();
+  const openProdukDetailsModal = (produks: DataProdukTitipan) => {
+    setSelectedProduk(produks);
+    onViewProdukModalOpenChange();
   };
-
-  // Close Karyawan Details Modal
-  const onCloseKaryawanModal = () => {
-    setSelectedKaryawan(null);
-    onViewKaryawanModalOpenChange();
-  };
-
-  // Edit Karyawan modal
-  const {
-    isOpen: isEditKaryawanModalOpen,
-    onOpenChange: onEditKaryawanModalOpenChange,
-  } = useDisclosure();
-
-  // Selected Karyawan
-  const openKaryawanEditModal = (karyawans: DataKaryawan) => {
-    setSelectedKaryawan(karyawans);
-    onEditKaryawanModalOpenChange();
-  };
-
-  // Close Edit Karyawan Modal
-  const onCloseEditKaryawanModal = () => {
-    setSelectedKaryawan(null);
-    onEditKaryawanModalOpenChange();
-  };
-
-  // Delete Karyawan Modal
-  const {
-    isOpen: isDeleteKaryawanModalOpen,
-    onOpenChange: onDeleteKaryawanModalOpenChange,
-  } = useDisclosure();
-
-  const openKaryawanDeleteModal = (karyawans: DataKaryawan) => {
-    setSelectedKaryawan(karyawans);
-    onDeleteKaryawanModalOpenChange();
-  };
-
-  const onCloseDeleteKaryawanModal = () => {
-    setSelectedKaryawan(null);
-    onDeleteKaryawanModalOpenChange();
+  const onCloseDetailProdukModal = () => {
+    setSelectedProduk(null);
+    onViewProdukModalOpenChange();
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await apiGetKaryawan();
-        setKaryawans(response.data.data);
+        const response = await apiGetProdukTitipan();
+        // console.log(response.data.data);
+        setProduks(response.data.data);
       } catch (error) {
+        // console.log(error)
         setLoading(true);
       } finally {
         setLoading(false);
@@ -128,7 +113,7 @@ export default function KaryawanTable() {
     fetchData();
   }, []);
 
-  const pages = Math.ceil(karyawans.length / rowsPerPage);
+  const pages = Math.ceil(produks.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -141,16 +126,16 @@ export default function KaryawanTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredKaryawans = [...karyawans];
+    let filteredProduks = [...produks];
 
     if (hasSearchFilter) {
-      filteredKaryawans = filteredKaryawans.filter((karyawan) =>
-        karyawan.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredProduks = filteredProduks.filter((user) =>
+        user.name.toString().toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredKaryawans;
-  }, [karyawans, filterValue]);
+    return filteredProduks;
+  }, [produks, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -160,26 +145,30 @@ export default function KaryawanTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: DataKaryawan, b: DataKaryawan) => {
-      const first = a[sortDescriptor.column as keyof DataKaryawan] as number;
-      const second = b[sortDescriptor.column as keyof DataKaryawan] as number;
+    return [...items].sort((a: DataProdukTitipan, b: DataProdukTitipan) => {
+      const first = a[
+        sortDescriptor.column as keyof DataProdukTitipan
+      ] as number;
+      const second = b[
+        sortDescriptor.column as keyof DataProdukTitipan
+      ] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
-
   const renderCell = React.useCallback(
-    (karyawan: DataKaryawan, columnKey: React.Key): ReactNode => {
-      const cellValue = karyawan[columnKey as keyof DataKaryawan];
+    (produk: DataProdukTitipan, columnKey: React.Key) => {
+      const cellValue = produk[columnKey as keyof DataProdukTitipan];
 
       switch (columnKey) {
         case "id":
-          return <div>{karyawan.id}</div>;
-        case "name":
-          return <div>{karyawan.name}</div>;
-        case "jabatan":
-          return <div>{karyawan.jabatan.name}</div>;
+          return <div>{produk.id}</div>;
+        case "kelipatan":
+          return <div> {produk.name}</div>;
+        case "bonus_poin":
+          return <div>{produk.harga}</div>;
+
         case "actions":
           return (
             <div className="relative flex items-center gap-4">
@@ -188,34 +177,10 @@ export default function KaryawanTable() {
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
                 <span
-                  onClick={() => openKaryawanDetailsModal(karyawan)}
+                  onClick={() => openProdukDetailsModal(produk)}
                   className="text-xl text-blue-600 cursor-pointer active:opacity-50"
                 >
                   <IconFilledEye />
-                </span>
-              </Tooltip>
-              <Tooltip
-                color="success"
-                className="p-1.5 rounded-lg border border-white"
-                content="Edit Karyawan"
-              >
-                <span
-                  onClick={() => openKaryawanEditModal(karyawan)}
-                  className="text-xl text-success cursor-pointer active:opacity-50"
-                >
-                  <IconEdit />
-                </span>
-              </Tooltip>
-              <Tooltip
-                color="danger"
-                className="p-1.5"
-                content="Delete Karyawan"
-              >
-                <span
-                  onClick={() => openKaryawanDeleteModal(karyawan)}
-                  className="text-xl text-danger cursor-pointer active:opacity-50"
-                >
-                  <IconDelete />
                 </span>
               </Tooltip>
             </div>
@@ -291,7 +256,7 @@ export default function KaryawanTable() {
               </DropdownMenu>
             </Dropdown>
             <Button
-              onClick={onAddKaryawanModalOpenChange}
+              onClick={onAddProdukModalOpenChange}
               className="bg-[#0370C3] text-background"
               endContent={<PlusIcon />}
               size="md"
@@ -301,9 +266,7 @@ export default function KaryawanTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className=" text-medium">
-            Total {karyawans.length} Karyawan
-          </span>
+          <span className=" text-medium">Total {produks.length} produks</span>
           <label className="flex items-center text-medium">
             Rows per page:
             <select
@@ -322,7 +285,7 @@ export default function KaryawanTable() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    karyawans.length,
+    produks.length,
     hasSearchFilter,
   ]);
 
@@ -367,67 +330,54 @@ export default function KaryawanTable() {
   if (loading) return "Loading...";
 
   return (
-    <div className="p-7">
-      <div className="p-4 border border-gray-100 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold pb-4">Master Karyawan</h2>
-        <Table
-          isCompact
-          removeWrapper
-          aria-label="Data Table Karyawan"
-          bottomContent={bottomContent}
-          bottomContentPlacement="outside"
-          classNames={classNames}
-          sortDescriptor={sortDescriptor}
-          topContent={topContent}
-          topContentPlacement="outside"
-          onSelectionChange={setSelectedKeys}
-          onSortChange={setSortDescriptor}
-        >
-          <TableHeader columns={headerColumns}>
-            {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-                allowsSorting={column.sortable}
-              >
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody emptyContent={"No Karyawan found"} items={sortedItems}>
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <AddKaryawanModal
-          isOpen={isAddKaryawanModalOpen}
-          onClose={onAddKaryawanModalOpenChange}
-          title="Add User"
-        />
-        <ViewKaryawanModal
-          isOpen={isViewKaryawanModalOpen}
-          onClose={onCloseKaryawanModal}
-          title="Karyawan Details"
-          karyawanData={selectedKaryawan}
-        />
-        <EditKaryawanModal
-          isOpen={isEditKaryawanModalOpen}
-          onClose={onCloseEditKaryawanModal}
-          title="Edit Karyawan Confirmation"
-          karyawanData={selectedKaryawan}
-        />
-        <DeleteKaryawanModal
-          isOpen={isDeleteKaryawanModalOpen}
-          onClose={onCloseDeleteKaryawanModal}
-          title="Delete Karyawan Confirmation"
-          karyawanData={selectedKaryawan}
-        />
-      </div>
+    <div className="p-4 border border-gray-100 shadow-lg rounded-lg">
+      <h2 className="text-2xl font-semibold pb-4">Master produk</h2>
+      <Table
+        isCompact
+        removeWrapper
+        aria-label="Data Table User"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        classNames={classNames}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={"No users found"} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <AddProdukTitipanModal
+        isOpen={isAddProdukModalOpen}
+        onClose={onAddProdukModalOpenChange}
+        title="Add produk"
+        dataPenitip = {dataPenitip}
+      />
+      <ViewProdukTitipanModal
+        isOpen={isViewProdukModalOpen}
+        onClose={onCloseDetailProdukModal}
+        title="produk Details"
+        produkData={selectedProduk}
+      />
     </div>
   );
 }

@@ -1,24 +1,23 @@
 "use server";
 
-import { DataKaryawan, DataKaryawanForm } from "@/interfaces/KaryawanInterface";
+import { DataPenitip, DataPenitipForm } from "@/interfaces/PenitipInterface";
 import satellite from "@/service/satellite";
 import { read } from "@/store/cookies";
+let penitipPromise: Promise<any> | null = null;
 
-let karyawanAccountPromise: Promise<any> | null = null;
-
-const apiGetKaryawan = () => {
-  if (karyawanAccountPromise) {
-    return karyawanAccountPromise;
+const apiGetPenitip = () => {
+  if (penitipPromise) {
+    return penitipPromise;
   }
-
-  karyawanAccountPromise = new Promise((resolve, reject) => {
+  //   console.log(read('__TOKEN__'))
+  penitipPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/karyawan/index`, {
+      .get(`https://jurwawe.sga.dom.my.id/api/penitip/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
       })
-      .then((response: { data: DataKaryawan }) => {
+      .then((response: { data: DataPenitip }) => {
         const storageData = response.data;
         resolve({ status: "success", data: storageData });
       })
@@ -26,18 +25,18 @@ const apiGetKaryawan = () => {
         reject(error);
       })
       .finally(() => {
-        karyawanAccountPromise = null;
+        penitipPromise = null;
       });
   });
 
-  return karyawanAccountPromise;
+  return penitipPromise;
 };
 
-export default apiGetKaryawan;
+export default apiGetPenitip;
 
-export const apiCreateKaryawan = async (body: DataKaryawanForm) => {
+export const apiCreatePenitip = async (body: DataPenitipForm) => {
   await satellite
-    .post(`https://jurwawe.sga.dom.my.id/api/karyawan/store`, body, {
+    .post(`https://jurwawe.sga.dom.my.id/api/penitip/store`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -46,12 +45,12 @@ export const apiCreateKaryawan = async (body: DataKaryawanForm) => {
       throw err.response.data;
     })
     .then(() => {});
-  return apiCreateKaryawan;
+  return apiCreatePenitip;
 };
 
-export const apiDeleteKaryawan = async (id: number) => {
+export const apiDeletePenitip = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/karyawan/destroy/${id}`, {
+    .delete(`https://jurwawe.sga.dom.my.id/api/penitip/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -60,16 +59,16 @@ export const apiDeleteKaryawan = async (id: number) => {
       throw err.response.data;
     })
     .then(() => {});
-  return apiDeleteKaryawan;
+  return apiDeletePenitip;
 };
 
-export const apiEditKaryawan = async (
+export const apiEditPenitip = async (
   id: number,
-  body: { name: string; jabatan: { id: number } }
+  body: { name: string;  }
 ) => {
   try {
     await satellite.put(
-      `https://jurwawe.sga.dom.my.id/api/karyawan/update/${id}`,
+      `https://jurwawe.sga.dom.my.id/api/penitip/update/${id}`,
       body,
       {
         headers: {

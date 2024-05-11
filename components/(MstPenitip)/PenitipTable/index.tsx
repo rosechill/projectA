@@ -28,17 +28,19 @@ import {
   IconDelete,
 } from "@/assets/icons";
 import { capitalize } from "@/utils/capitalize";
-import { DataKaryawan } from "@/interfaces/KaryawanInterface";
-import { columns } from "@/utils/columnsTable/dataKaryawan";
-import apiGetKaryawan from "@/service/api/apiKaryawan";
-import ViewKaryawanModal from "../ViewKaryawanModal";
-import AddKaryawanModal from "../AddKaryawanModal";
-import EditKaryawanModal from "../EditKaryawanModal";
-import DeleteKaryawanModal from "../DeleteKaryawanModal";
+// import ViewPromoModal from "../ViewPromoModal";
+import AddPenitipModal from "@/components/(MstPenitip)/AddPenitipModal";
+import { DataPenitip } from "@/interfaces/PenitipInterface";
+import apiGetPenitip from "@/service/api/apiPenitip";
+import ViewPenitipModal from "../ViewPenitipModal";
+import DeletePenitipModal from "../DeletePenitipModal";
+import EditPenitipModal from "../EditPenitipModal";
+import { columns } from "@/utils/columnsTable/dataPenitip";
+// import DeletePromoModal from "../DeletePromoModal";
+// import EditPromoModal from "../EditPromoModal";
+const INITIAL_VISIBLE_COLUMNS = ["id", "name", "actions"];
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "name", "jabatan", "actions"];
-
-export default function KaryawanTable() {
+export default function PenitipTable() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -51,75 +53,67 @@ export default function KaryawanTable() {
   });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [karyawans, setKaryawans] = useState<DataKaryawan[]>([]);
 
-  const {
-    isOpen: isAddKaryawanModalOpen,
-    onOpenChange: onAddKaryawanModalOpenChange,
-  } = useDisclosure();
+  const [penitips, setPenitips] = useState<DataPenitip[]>([]);
 
-  const [selectedKaryawan, setSelectedKaryawan] = useState<DataKaryawan | null>(
+  //handlerModal
+
+  //add Modal
+  const [selectedPenitip, setSelectedPenitip] = useState<DataPenitip | null>(
     null
   );
-  // View Karyawan Modal
+
   const {
-    isOpen: isViewKaryawanModalOpen,
-    onOpenChange: onViewKaryawanModalOpenChange,
+    isOpen: isAddPenitipModalOpen,
+    onOpenChange: onAddPenitipModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isViewPenitipModalOpen,
+    onOpenChange: onViewPenitipModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isDeletePenitipModalOpen,
+    onOpenChange: onDeletePenitipModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isEditPenitipModalOpen,
+    onOpenChange: onEditPenitipModalOpenChange,
   } = useDisclosure();
 
-  // Open Karyawan Details Modal
-  const openKaryawanDetailsModal = (karyawans: DataKaryawan) => {
-    setSelectedKaryawan(karyawans);
-    onViewKaryawanModalOpenChange();
+  const openPenitipDetailsModal = (penitips: DataPenitip) => {
+    setSelectedPenitip(penitips);
+    onViewPenitipModalOpenChange();
   };
-
-  // Close Karyawan Details Modal
-  const onCloseKaryawanModal = () => {
-    setSelectedKaryawan(null);
-    onViewKaryawanModalOpenChange();
+  const openPenitipDeleteModal = (penitips: DataPenitip) => {
+    setSelectedPenitip(penitips);
+    onDeletePenitipModalOpenChange();
   };
-
-  // Edit Karyawan modal
-  const {
-    isOpen: isEditKaryawanModalOpen,
-    onOpenChange: onEditKaryawanModalOpenChange,
-  } = useDisclosure();
-
-  // Selected Karyawan
-  const openKaryawanEditModal = (karyawans: DataKaryawan) => {
-    setSelectedKaryawan(karyawans);
-    onEditKaryawanModalOpenChange();
+  const openPenitipEditModal = (penitips: DataPenitip) => {
+    setSelectedPenitip(penitips);
+    onEditPenitipModalOpenChange();
   };
-
-  // Close Edit Karyawan Modal
-  const onCloseEditKaryawanModal = () => {
-    setSelectedKaryawan(null);
-    onEditKaryawanModalOpenChange();
+  const onCloseDetailPenitipModal = () => {
+    setSelectedPenitip(null);
+    onViewPenitipModalOpenChange();
   };
-
-  // Delete Karyawan Modal
-  const {
-    isOpen: isDeleteKaryawanModalOpen,
-    onOpenChange: onDeleteKaryawanModalOpenChange,
-  } = useDisclosure();
-
-  const openKaryawanDeleteModal = (karyawans: DataKaryawan) => {
-    setSelectedKaryawan(karyawans);
-    onDeleteKaryawanModalOpenChange();
+  const onCloseDeletePenitipModal = () => {
+    setSelectedPenitip(null);
+    onDeletePenitipModalOpenChange();
   };
-
-  const onCloseDeleteKaryawanModal = () => {
-    setSelectedKaryawan(null);
-    onDeleteKaryawanModalOpenChange();
+  const onCloseEditPenitipModal = () => {
+    setSelectedPenitip(null);
+    onEditPenitipModalOpenChange();
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await apiGetKaryawan();
-        setKaryawans(response.data.data);
+        const response = await apiGetPenitip();
+        // console.log(response.data.data);
+        setPenitips(response.data.data);
       } catch (error) {
+        // console.log(error)
         setLoading(true);
       } finally {
         setLoading(false);
@@ -128,7 +122,7 @@ export default function KaryawanTable() {
     fetchData();
   }, []);
 
-  const pages = Math.ceil(karyawans.length / rowsPerPage);
+  const pages = Math.ceil(penitips.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -141,16 +135,16 @@ export default function KaryawanTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredKaryawans = [...karyawans];
+    let filteredPenitips = [...penitips];
 
     if (hasSearchFilter) {
-      filteredKaryawans = filteredKaryawans.filter((karyawan) =>
-        karyawan.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredPenitips = filteredPenitips.filter((user) =>
+        user.name.toString().toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredKaryawans;
-  }, [karyawans, filterValue]);
+    return filteredPenitips;
+  }, [penitips, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -160,26 +154,23 @@ export default function KaryawanTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: DataKaryawan, b: DataKaryawan) => {
-      const first = a[sortDescriptor.column as keyof DataKaryawan] as number;
-      const second = b[sortDescriptor.column as keyof DataKaryawan] as number;
+    return [...items].sort((a: DataPenitip, b: DataPenitip) => {
+      const first = a[sortDescriptor.column as keyof DataPenitip] as number;
+      const second = b[sortDescriptor.column as keyof DataPenitip] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
-
   const renderCell = React.useCallback(
-    (karyawan: DataKaryawan, columnKey: React.Key): ReactNode => {
-      const cellValue = karyawan[columnKey as keyof DataKaryawan];
+    (penitip: DataPenitip, columnKey: React.Key) => {
+      const cellValue = penitip[columnKey as keyof DataPenitip];
 
       switch (columnKey) {
         case "id":
-          return <div>{karyawan.id}</div>;
-        case "name":
-          return <div>{karyawan.name}</div>;
-        case "jabatan":
-          return <div>{karyawan.jabatan.name}</div>;
+          return <div>{penitip.id}</div>;
+        case "nama":
+          return <div> {penitip.name}</div>;
         case "actions":
           return (
             <div className="relative flex items-center gap-4">
@@ -188,7 +179,7 @@ export default function KaryawanTable() {
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
                 <span
-                  onClick={() => openKaryawanDetailsModal(karyawan)}
+                  onClick={() => openPenitipDetailsModal(penitip)}
                   className="text-xl text-blue-600 cursor-pointer active:opacity-50"
                 >
                   <IconFilledEye />
@@ -197,10 +188,10 @@ export default function KaryawanTable() {
               <Tooltip
                 color="success"
                 className="p-1.5 rounded-lg border border-white"
-                content="Edit Karyawan"
+                content="Edit Penitip"
               >
                 <span
-                  onClick={() => openKaryawanEditModal(karyawan)}
+                  onClick={() => openPenitipEditModal(penitip)}
                   className="text-xl text-success cursor-pointer active:opacity-50"
                 >
                   <IconEdit />
@@ -209,10 +200,10 @@ export default function KaryawanTable() {
               <Tooltip
                 color="danger"
                 className="p-1.5"
-                content="Delete Karyawan"
+                content="Delete Penitip"
               >
                 <span
-                  onClick={() => openKaryawanDeleteModal(karyawan)}
+                  onClick={() => openPenitipDeleteModal(penitip)}
                   className="text-xl text-danger cursor-pointer active:opacity-50"
                 >
                   <IconDelete />
@@ -291,7 +282,7 @@ export default function KaryawanTable() {
               </DropdownMenu>
             </Dropdown>
             <Button
-              onClick={onAddKaryawanModalOpenChange}
+              onClick={onAddPenitipModalOpenChange}
               className="bg-[#0370C3] text-background"
               endContent={<PlusIcon />}
               size="md"
@@ -301,9 +292,7 @@ export default function KaryawanTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className=" text-medium">
-            Total {karyawans.length} Karyawan
-          </span>
+          <span className=" text-medium">Total {penitips.length} Penitips</span>
           <label className="flex items-center text-medium">
             Rows per page:
             <select
@@ -322,7 +311,7 @@ export default function KaryawanTable() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    karyawans.length,
+    penitips.length,
     hasSearchFilter,
   ]);
 
@@ -367,67 +356,65 @@ export default function KaryawanTable() {
   if (loading) return "Loading...";
 
   return (
-    <div className="p-7">
-      <div className="p-4 border border-gray-100 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold pb-4">Master Karyawan</h2>
-        <Table
-          isCompact
-          removeWrapper
-          aria-label="Data Table Karyawan"
-          bottomContent={bottomContent}
-          bottomContentPlacement="outside"
-          classNames={classNames}
-          sortDescriptor={sortDescriptor}
-          topContent={topContent}
-          topContentPlacement="outside"
-          onSelectionChange={setSelectedKeys}
-          onSortChange={setSortDescriptor}
-        >
-          <TableHeader columns={headerColumns}>
-            {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-                allowsSorting={column.sortable}
-              >
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody emptyContent={"No Karyawan found"} items={sortedItems}>
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        <AddKaryawanModal
-          isOpen={isAddKaryawanModalOpen}
-          onClose={onAddKaryawanModalOpenChange}
-          title="Add User"
-        />
-        <ViewKaryawanModal
-          isOpen={isViewKaryawanModalOpen}
-          onClose={onCloseKaryawanModal}
-          title="Karyawan Details"
-          karyawanData={selectedKaryawan}
-        />
-        <EditKaryawanModal
-          isOpen={isEditKaryawanModalOpen}
-          onClose={onCloseEditKaryawanModal}
-          title="Edit Karyawan Confirmation"
-          karyawanData={selectedKaryawan}
-        />
-        <DeleteKaryawanModal
-          isOpen={isDeleteKaryawanModalOpen}
-          onClose={onCloseDeleteKaryawanModal}
-          title="Delete Karyawan Confirmation"
-          karyawanData={selectedKaryawan}
-        />
-      </div>
+    <div className="p-4 border border-gray-100 shadow-lg rounded-lg">
+      <h2 className="text-2xl font-semibold pb-4">Master Penitip</h2>
+      <Table
+        isCompact
+        removeWrapper
+        aria-label="Data Table User"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        classNames={classNames}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={"No users found"} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <AddPenitipModal
+        isOpen={isAddPenitipModalOpen}
+        onClose={onAddPenitipModalOpenChange}
+        title="Add Penitip"
+      />
+      <ViewPenitipModal
+        isOpen={isViewPenitipModalOpen}
+        onClose={onCloseDetailPenitipModal}
+        title="Penitip Details"
+        penitipData={selectedPenitip}
+      />
+      <DeletePenitipModal
+        isOpen={isDeletePenitipModalOpen}
+        onClose={onCloseDeletePenitipModal}
+        title="Delete Penitip Confirmation"
+        penitipData={selectedPenitip}
+      />
+      <EditPenitipModal
+        isOpen={isEditPenitipModalOpen}
+        onClose={onCloseEditPenitipModal}
+        title="Delete Penitip Confirmation"
+        penitipData={selectedPenitip}
+      />
     </div>
   );
 }
