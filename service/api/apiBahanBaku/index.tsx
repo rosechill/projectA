@@ -1,6 +1,9 @@
 "use server";
 
-import { DataBahanBaku, DataBahanBakuForm } from "@/interfaces/BahanBakuInterface";
+import {
+  DataBahanBaku,
+  DataBahanBakuForm,
+} from "@/interfaces/BahanBakuInterface";
 import satellite from "@/service/satellite";
 import { read } from "@/store/cookies";
 import axios, { Axios } from "axios";
@@ -36,7 +39,7 @@ const apiGetBahanBaku = () => {
 export default apiGetBahanBaku;
 
 export const apiCreateBahanBaku = async (form: any) => {
- try {
+  try {
     const response = await axios.post(
       `https://jurwawe.sga.dom.my.id/api/bahan-baku/store`,
       form,
@@ -47,16 +50,13 @@ export const apiCreateBahanBaku = async (form: any) => {
         },
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error: any) {
     throw error.response.data;
   }
 };
 
-export const apiEditBahanBaku = async (
-  id: number,
-  body: { form:any }
-) => {
+export const apiEditBahanBaku = async (id: number, body: { form: any }) => {
   try {
     await satellite.post(
       `https://jurwawe.sga.dom.my.id/api/bahan-baku/update/${id}`,
