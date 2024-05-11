@@ -37,9 +37,9 @@ export default function Container({
 
     if (matchedMenu) {
       return (
-        <div className="overflow-x-hidden">
-          <ContainerProvider>
-            <div className="flex">
+        <div className="overflow-x-hidden relative">
+          <ContainerProvider >
+            <div className="flex relative">
               {matchedMenu === "admin" && <MenuAdmin role={role} />}
               {matchedMenu === "MO" && <MenuAdmin role={role} />}
               {matchedMenu === "customer" && <MenuAdmin role={role} />}

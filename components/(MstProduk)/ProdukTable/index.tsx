@@ -28,16 +28,25 @@ import {
   IconDelete,
 } from "@/assets/icons";
 import { capitalize } from "@/utils/capitalize";
-import { DataPromo } from "@/interfaces/PromoInterface";
-import { columns } from "@/utils/columnsTable/dataPromo";
-import apiGetPromo from "@/service/api/apiPromo";
-import ViewPromoModal from "../ViewPromoModal";
-import AddPromoModal from "../AddPromoModal";
-import DeletePromoModal from "../DeletePromoModal";
-import EditPromoModal from "../EditPromoModal";
-const INITIAL_VISIBLE_COLUMNS = ["id", "kelipatan", "bonus_poin", "actions"];
+import { DataProduk } from "@/interfaces/ProdukInterface";
+import { columns } from "@/utils/columnsTable/dataProduk";
+import apiGetProduk from "@/service/api/apiProduk";
+import AddProdukModal from "../AddProdukModal";
+import ViewProdukModal from "../ViewProdukModal";
+import DeleteProdukModal from "../DeleteProdukModal";
+import EditProdukModal from "../EditProdukModal";
 
-export default function PromoTable() {
+const INITIAL_VISIBLE_COLUMNS = [
+  "id",
+  "name",
+  "kategori",
+  "kuota_harian",
+  "harga",
+  "gambar",
+  "actions",
+];
+
+export default function ProdukTable() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -51,61 +60,61 @@ export default function PromoTable() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  const [promos, setPromos] = useState<DataPromo[]>([]);
+  const [produks, setProduks] = useState<DataProduk[]>([]);
 
   //handlerModal
 
   //add Modal
-  const [selectedPromo, setSelectedPromo] = useState<DataPromo | null>(null);
+  const [selectedProduk, setSelectedProduk] = useState<DataProduk | null>(null);
   const {
-    isOpen: isAddPromoModalOpen,
-    onOpenChange: onAddPromoModalOpenChange,
+    isOpen: isAddProdukModalOpen,
+    onOpenChange: onAddProdukModalOpenChange,
   } = useDisclosure();
   const {
-    isOpen: isViewPromoModalOpen,
-    onOpenChange: onViewPromoModalOpenChange,
+    isOpen: isViewProdukModalOpen,
+    onOpenChange: onViewProdukModalOpenChange,
   } = useDisclosure();
   const {
-    isOpen: isDeletePromoModalOpen,
-    onOpenChange: onDeletePromoModalOpenChange,
+    isOpen: isDeleteProdukModalOpen,
+    onOpenChange: onDeleteProdukModalOpenChange,
   } = useDisclosure();
   const {
-    isOpen: isEditPromoModalOpen,
-    onOpenChange: onEditPromoModalOpenChange,
+    isOpen: isEditProdukModalOpen,
+    onOpenChange: onEditProdukModalOpenChange,
   } = useDisclosure();
 
-  const openPromoDetailsModal = (promos: DataPromo) => {
-    setSelectedPromo(promos);
-    onViewPromoModalOpenChange();
+  const openProdukDetailsModal = (produks: DataProduk) => {
+    setSelectedProduk(produks);
+    onViewProdukModalOpenChange();
   };
-  const openPromoDeleteModal = (promos: DataPromo) => {
-    setSelectedPromo(promos);
-    onDeletePromoModalOpenChange();
+  const openProdukDeleteModal = (produks: DataProduk) => {
+    setSelectedProduk(produks);
+    onDeleteProdukModalOpenChange();
   };
-  const openPromoEditModal = (promos: DataPromo) => {
-    setSelectedPromo(promos);
-    onEditPromoModalOpenChange();
+  const openProdukEditModal = (produks: DataProduk) => {
+    setSelectedProduk(produks);
+    onEditProdukModalOpenChange();
   };
-  const onCloseDetailPromoModal = () => {
-    setSelectedPromo(null);
-    onViewPromoModalOpenChange();
+  const onCloseDetailProdukModal = () => {
+    setSelectedProduk(null);
+    onViewProdukModalOpenChange();
   };
-  const onCloseDeletePromoModal = () => {
-    setSelectedPromo(null);
-    onDeletePromoModalOpenChange();
+  const onCloseDeleteProdukModal = () => {
+    setSelectedProduk(null);
+    onDeleteProdukModalOpenChange();
   };
-  const onCloseEditPromoModal = () => {
-    setSelectedPromo(null);
-    onEditPromoModalOpenChange();
+  const onCloseEditProdukModal = () => {
+    setSelectedProduk(null);
+    onEditProdukModalOpenChange();
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await apiGetPromo();
+        const response = await apiGetProduk();
         // console.log(response.data.data);
-        setPromos(response.data.data);
+        setProduks(response.data.data);
       } catch (error) {
         // console.log(error)
         setLoading(true);
@@ -116,7 +125,7 @@ export default function PromoTable() {
     fetchData();
   }, []);
 
-  const pages = Math.ceil(promos.length / rowsPerPage);
+  const pages = Math.ceil(produks.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -129,19 +138,16 @@ export default function PromoTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredPromos = [...promos];
+    let filteredProduks = [...produks];
 
     if (hasSearchFilter) {
-      filteredPromos = filteredPromos.filter((user) =>
-        user.bonus_poin
-          .toString()
-          .toLowerCase()
-          .includes(filterValue.toLowerCase())
+      filteredProduks = filteredProduks.filter((user) =>
+        user.name.toString().toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredPromos;
-  }, [promos, filterValue]);
+    return filteredProduks;
+  }, [produks, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -151,25 +157,25 @@ export default function PromoTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: DataPromo, b: DataPromo) => {
-      const first = a[sortDescriptor.column as keyof DataPromo] as number;
-      const second = b[sortDescriptor.column as keyof DataPromo] as number;
+    return [...items].sort((a: DataProduk, b: DataProduk) => {
+      const first = a[sortDescriptor.column as keyof DataProduk] as number;
+      const second = b[sortDescriptor.column as keyof DataProduk] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
   const renderCell = React.useCallback(
-    (promo: DataPromo, columnKey: React.Key) => {
-      const cellValue = promo[columnKey as keyof DataPromo];
+    (produk: DataProduk, columnKey: React.Key) => {
+      const cellValue = produk[columnKey as keyof DataProduk];
 
       switch (columnKey) {
         case "id":
-          return <div>{promo.id}</div>;
+          return <div>{produk.id}</div>;
         case "kelipatan":
-          return <div> {promo.bonus_poin}</div>;
+          return <div> {produk.name}</div>;
         case "bonus_poin":
-          return <div>{promo.kelipatan}</div>;
+          return <div>{produk.harga}</div>;
 
         case "actions":
           return (
@@ -179,7 +185,7 @@ export default function PromoTable() {
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
                 <span
-                  onClick={() => openPromoDetailsModal(promo)}
+                  onClick={() => openProdukDetailsModal(produk)}
                   className="text-xl text-blue-600 cursor-pointer active:opacity-50"
                 >
                   <IconFilledEye />
@@ -188,14 +194,20 @@ export default function PromoTable() {
               <Tooltip
                 color="success"
                 className="p-1.5 rounded-lg border border-white"
-                content="Edit promo"
+                content="Edit produk"
               >
-                <span onClick={() => openPromoEditModal(promo)} className="text-xl text-success cursor-pointer active:opacity-50">
+                <span
+                  onClick={() => openProdukEditModal(produk)}
+                  className="text-xl text-success cursor-pointer active:opacity-50"
+                >
                   <IconEdit />
                 </span>
               </Tooltip>
-              <Tooltip color="danger" className="p-1.5" content="Delete promo">
-                <span onClick={() => openPromoDeleteModal(promo)}  className="text-xl text-danger cursor-pointer active:opacity-50">
+              <Tooltip color="danger" className="p-1.5" content="Delete produk">
+                <span
+                  onClick={() => openProdukDeleteModal(produk)}
+                  className="text-xl text-danger cursor-pointer active:opacity-50"
+                >
                   <IconDelete />
                 </span>
               </Tooltip>
@@ -272,7 +284,7 @@ export default function PromoTable() {
               </DropdownMenu>
             </Dropdown>
             <Button
-              onClick={onAddPromoModalOpenChange}
+              onClick={onAddProdukModalOpenChange}
               className="bg-[#0370C3] text-background"
               endContent={<PlusIcon />}
               size="md"
@@ -282,7 +294,7 @@ export default function PromoTable() {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className=" text-medium">Total {promos.length} Promos</span>
+          <span className=" text-medium">Total {produks.length} produks</span>
           <label className="flex items-center text-medium">
             Rows per page:
             <select
@@ -301,7 +313,7 @@ export default function PromoTable() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    promos.length,
+    produks.length,
     hasSearchFilter,
   ]);
 
@@ -347,7 +359,7 @@ export default function PromoTable() {
 
   return (
     <div className="p-4 border border-gray-100 shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold pb-4">Master Promo</h2>
+      <h2 className="text-2xl font-semibold pb-4">Master produk</h2>
       <Table
         isCompact
         removeWrapper
@@ -382,28 +394,28 @@ export default function PromoTable() {
           )}
         </TableBody>
       </Table>
-      <AddPromoModal
-        isOpen={isAddPromoModalOpen}
-        onClose={onAddPromoModalOpenChange}
-        title="Add Promo"
+      <AddProdukModal
+        isOpen={isAddProdukModalOpen}
+        onClose={onAddProdukModalOpenChange}
+        title="Add produk"
       />
-      <ViewPromoModal
-        isOpen={isViewPromoModalOpen}
-        onClose={onCloseDetailPromoModal}
-        title="Promo Details"
-        promoData={selectedPromo}
+      <ViewProdukModal
+        isOpen={isViewProdukModalOpen}
+        onClose={onCloseDetailProdukModal}
+        title="produk Details"
+        produkData={selectedProduk}
       />
-      <DeletePromoModal
-        isOpen={isDeletePromoModalOpen}
-        onClose={onCloseDeletePromoModal}
-        title="Delete Promo Confirmation"
-        promoData={selectedPromo}   
+      <DeleteProdukModal
+        isOpen={isDeleteProdukModalOpen}
+        onClose={onCloseDeleteProdukModal}
+        title="Delete produk Confirmation"
+        produkData={selectedProduk}
       />
-      <EditPromoModal
-        isOpen={isEditPromoModalOpen}
-        onClose={onCloseEditPromoModal}
-        title="Delete Promo Confirmation"
-        promoData={selectedPromo}   
+      <EditProdukModal
+        isOpen={isEditProdukModalOpen}
+        onClose={onCloseEditProdukModal}
+        title="Delete produk Confirmation"
+        produkData={selectedProduk}
       />
     </div>
   );

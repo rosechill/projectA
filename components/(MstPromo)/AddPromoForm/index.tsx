@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { DataPromoForm } from "@/interfaces/PromoInterface";
 import { apiCreatePromo } from "@/service/api/apiPromo";
-
+import 'react-toastify/dist/ReactToastify.css';
 interface PromoFormProps {
   onClose: () => void;
 }
@@ -116,7 +116,7 @@ export default function PromoForm({ onClose }: PromoFormProps) {
               type="submit"
               disabled={!isValid}
             >
-              Add User
+              Add Promo
             </Button>
           </div>
         </form>

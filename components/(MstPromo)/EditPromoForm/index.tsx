@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { DataPromo, DataPromoForm } from "@/interfaces/PromoInterface";
 import { apiEditPromo } from "@/service/api/apiPromo";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface EditPromoFormProps {
   onClose: () => void;
@@ -93,7 +94,7 @@ const EditPromoForm: React.FC<EditPromoFormProps> = ({
         </div>
         <div className="flex gap-4 justify-end pt-6 pb-2">
           <Button
-            className="border-1 border-[#0370C3] bg-primary min-w-[100px]"
+            className="border-1 border-[#0370C3] bg-primary text-white min-w-[100px]"
             variant="flat"
             size="md"
             onClick={onClose}
@@ -103,8 +104,8 @@ const EditPromoForm: React.FC<EditPromoFormProps> = ({
           <Button
             className={`${
               isValid
-                ? "bg-[#0370C3] text-primary"
-                : "bg-primary-disabled text-primary-disabled"
+                ? "bg-[#0370C3] text-white"
+                : "bg-primary-disabled border-2 border-[#0370C3] text-white-disabled"
             } min-w-[100px]`}
             variant="flat"
             size="md"
