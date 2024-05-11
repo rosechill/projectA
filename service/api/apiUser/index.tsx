@@ -37,9 +37,14 @@ const apiGetUser = () => {
 
 export default apiGetUser;
 
-export const apiGetHistoryPesanan = ({ id }: { id: number | undefined }) => {
+export const apiGetHistoryPesanan = async ({ id }: { id: number |null| string| undefined }) => {
   if (userAccountPromise) {
     return userAccountPromise;
+  }
+
+  if(id == null){
+    const getToken = await read("__USERID__");
+    id  = getToken
   }
 
   userAccountPromise = new Promise((resolve, reject) => {

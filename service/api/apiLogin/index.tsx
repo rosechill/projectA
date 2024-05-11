@@ -10,6 +10,7 @@ const apiLogin = async (body: { email: string; password: string }) =>
     .then((response) => {
       create("__TOKEN__", response.data.data.token);
       create("__ROLE__", response.data.data.role);
+      create("__USERID__", response.data.data.id);
       const storageData = response.data;
       delete storageData.tokenSession;
       return { status: "status", data: storageData };

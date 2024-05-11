@@ -25,13 +25,13 @@ export default function mstCustomer() {
     fetchDataUser();
 
     const data: Promise<DataPesanan[]> = apiGetHistoryPesanan({
-      id: user?.id,
+      id: null,
     });
 
     data.then((res) => {
       setHistory(res);
     });
-  }, [user]);
+  }, []);
 
   const handleUpdateName = async () => {
     try {
@@ -80,6 +80,7 @@ export default function mstCustomer() {
           </div>
         </div>
         <div className="w-3/5">
+          
           {history?.length > 0 ? (
             <div className="flex flex-col gap-4 w-full">
               <p className="font-semibold text-center ">History Pesanan</p>
