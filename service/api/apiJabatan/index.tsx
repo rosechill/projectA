@@ -52,22 +52,26 @@ export const apiCreateJabatan = async (body: DataJabatanForm) => {
 };
 
 export const apiEditJabatan = async (body: { id?: number; name: string }) => {
-  await satellite
-    .put(`https://jurwawe.sga.dom.my.id/api/jabatan/update/${body.id}`, body, {
-      headers: {
-        Authorization: `Bearer ${read("__TOKEN__")}`,
-      },
-    })
-    .catch((err) => {
-      throw err.response.data;
-    })
-    .then(() => {});
-  return apiEditJabatan;
+  try {
+    await satellite.post(
+      `https://jurwawe.sga.dom.my.id/api/jabatan/update/${body.id}`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      }
+    );
+    return "success";
+  } catch (err: any) {
+    console.log(err);
+    throw err.response.data;
+  }
 };
 
 export const apiDeleteJabatan = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/jabatan/update/${id}`, {
+    .delete(`https://jurwawe.sga.dom.my.id/api/jabatan/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
