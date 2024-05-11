@@ -25,19 +25,22 @@ import {
   SearchIcon,
   IconFilledEye,
   IconEdit,
-  IconDelete,
 } from "@/assets/icons";
 import { capitalize } from "@/utils/capitalize";
-import { DataPromo } from "@/interfaces/PromoInterface";
-import { columns } from "@/utils/columnsTable/dataPromo";
-import apiGetPromo from "@/service/api/apiPromo";
-import ViewPromoModal from "../ViewPromoModal";
-import AddPromoModal from "../AddPromoModal";
-import DeletePromoModal from "../DeletePromoModal";
-import EditPromoModal from "../EditPromoModal";
-const INITIAL_VISIBLE_COLUMNS = ["id", "kelipatan", "bonus_poin", "actions"];
+import { dataGaji } from "@/interfaces/GajiInterface";
+import { columns } from "@/utils/columnsTable/dataGaji";
+import apiGetGaji, { apiGetJabatanGaji } from "@/service/api/apiGaji";
+import EditGajiModal from "../EditGajiModal";
 
-export default function PromoTable() {
+const INITIAL_VISIBLE_COLUMNS = [
+  "id",
+  "jabatan_id",
+  "gaji",
+  "bonus",
+  "actions",
+];
+
+export default function GajiTable() {
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -51,61 +54,43 @@ export default function PromoTable() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  const [promos, setPromos] = useState<DataPromo[]>([]);
-
-  //handlerModal
-
-  //add Modal
-  const [selectedPromo, setSelectedPromo] = useState<DataPromo | null>(null);
-  const {
-    isOpen: isAddPromoModalOpen,
-    onOpenChange: onAddPromoModalOpenChange,
-  } = useDisclosure();
-  const {
-    isOpen: isViewPromoModalOpen,
-    onOpenChange: onViewPromoModalOpenChange,
-  } = useDisclosure();
-  const {
-    isOpen: isDeletePromoModalOpen,
-    onOpenChange: onDeletePromoModalOpenChange,
-  } = useDisclosure();
-  const {
-    isOpen: isEditPromoModalOpen,
-    onOpenChange: onEditPromoModalOpenChange,
-  } = useDisclosure();
-
-  const openPromoDetailsModal = (promos: DataPromo) => {
-    setSelectedPromo(promos);
-    onViewPromoModalOpenChange();
-  };
-  const openPromoDeleteModal = (promos: DataPromo) => {
-    setSelectedPromo(promos);
-    onDeletePromoModalOpenChange();
-  };
-  const openPromoEditModal = (promos: DataPromo) => {
-    setSelectedPromo(promos);
-    onEditPromoModalOpenChange();
-  };
-  const onCloseDetailPromoModal = () => {
-    setSelectedPromo(null);
-    onViewPromoModalOpenChange();
-  };
-  const onCloseDeletePromoModal = () => {
-    setSelectedPromo(null);
-    onDeletePromoModalOpenChange();
-  };
-  const onCloseEditPromoModal = () => {
-    setSelectedPromo(null);
-    onEditPromoModalOpenChange();
-  };
+  const [dataGajis, setDataGajis] = useState<dataGaji[]>([]);
+  const [dataJabatan, setDataJabatan] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const response = await apiGetGaji();
+        setDataGajis(response.data.data);
+      } catch (error) {
+        //
+      }
+    };
+    fetchData();
+  }, []);
+
+  //modal
+  const [selectedGaji, setSelectedGaji] =
+    useState<dataGaji | null>(null);
+  const {
+    isOpen: isEditGajiModalOpen,
+    onOpenChange: onEditGajiModalOpenChange,
+  } = useDisclosure();
+  const openGajiEditModal = (gaji : dataGaji) => {
+    setSelectedGaji(gaji);
+    onEditGajiModalOpenChange();
+  };
+  const onCloseEditGajiModal = () => {
+    setSelectedGaji(null);
+    onEditGajiModalOpenChange();
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
         setLoading(true);
-        const response = await apiGetPromo();
+        const response = await apiGetJabatanGaji();
         // console.log(response.data.data);
-        setPromos(response.data.data);
+        setDataJabatan(response.data.data);
       } catch (error) {
         // console.log(error)
         setLoading(true);
@@ -116,7 +101,7 @@ export default function PromoTable() {
     fetchData();
   }, []);
 
-  const pages = Math.ceil(promos.length / rowsPerPage);
+  const pages = Math.ceil(dataGajis.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -129,19 +114,16 @@ export default function PromoTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredPromos = [...promos];
+    let filteredGajis = [...dataGajis];
 
     if (hasSearchFilter) {
-      filteredPromos = filteredPromos.filter((user) =>
-        user.bonus_poin
-          .toString()
-          .toLowerCase()
-          .includes(filterValue.toLowerCase())
+      filteredGajis = filteredGajis.filter((user) =>
+        user.id.toString().toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredPromos;
-  }, [promos, filterValue]);
+    return filteredGajis;
+  }, [dataGajis, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -151,25 +133,27 @@ export default function PromoTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: DataPromo, b: DataPromo) => {
-      const first = a[sortDescriptor.column as keyof DataPromo] as number;
-      const second = b[sortDescriptor.column as keyof DataPromo] as number;
+    return [...items].sort((a: dataGaji, b: dataGaji) => {
+      const first = a[sortDescriptor.column as keyof dataGaji] as number;
+      const second = b[sortDescriptor.column as keyof dataGaji] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
   const renderCell = React.useCallback(
-    (promo: DataPromo, columnKey: React.Key) => {
-      const cellValue = promo[columnKey as keyof DataPromo];
+    (gaji: dataGaji, columnKey: React.Key) => {
+      const cellValue = gaji[columnKey as keyof dataGaji];
 
       switch (columnKey) {
         case "id":
-          return <div>{promo.id}</div>;
-        case "kelipatan":
-          return <div> {promo.bonus_poin}</div>;
-        case "bonus_poin":
-          return <div>{promo.kelipatan}</div>;
+          return <div>{gaji.id}</div>;
+        case "jabatan":
+          return <div>{gaji.jabatan_id}</div>;
+        case "gaji":
+          return <div> {gaji.gaji}</div>;
+        case "bonus":
+          return <div>{gaji.bonus}</div>;
 
         case "actions":
           return (
@@ -179,24 +163,10 @@ export default function PromoTable() {
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
                 <span
-                  onClick={() => openPromoDetailsModal(promo)}
+                  onClick={() => openGajiEditModal(gaji)}
                   className="text-xl text-blue-600 cursor-pointer active:opacity-50"
                 >
-                  <IconFilledEye />
-                </span>
-              </Tooltip>
-              <Tooltip
-                color="success"
-                className="p-1.5 rounded-lg border border-white"
-                content="Edit promo"
-              >
-                <span onClick={() => openPromoEditModal(promo)} className="text-xl text-success cursor-pointer active:opacity-50">
                   <IconEdit />
-                </span>
-              </Tooltip>
-              <Tooltip color="danger" className="p-1.5" content="Delete promo">
-                <span onClick={() => openPromoDeleteModal(promo)}  className="text-xl text-danger cursor-pointer active:opacity-50">
-                  <IconDelete />
                 </span>
               </Tooltip>
             </div>
@@ -271,18 +241,12 @@ export default function PromoTable() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button
-              onClick={onAddPromoModalOpenChange}
-              className="bg-[#0370C3] text-background"
-              endContent={<PlusIcon />}
-              size="md"
-            >
-              Add New
-            </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className=" text-medium">Total {promos.length} Promos</span>
+          <span className=" text-medium">
+            Total {dataGajis.length} dataGajis
+          </span>
           <label className="flex items-center text-medium">
             Rows per page:
             <select
@@ -301,7 +265,7 @@ export default function PromoTable() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    promos.length,
+    dataGajis.length,
     hasSearchFilter,
   ]);
 
@@ -347,7 +311,7 @@ export default function PromoTable() {
 
   return (
     <div className="p-4 border border-gray-100 shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold pb-4">Master Promo</h2>
+      <h2 className="text-2xl font-semibold pb-4">Master Gaji</h2>
       <Table
         isCompact
         removeWrapper
@@ -382,28 +346,12 @@ export default function PromoTable() {
           )}
         </TableBody>
       </Table>
-      <AddPromoModal
-        isOpen={isAddPromoModalOpen}
-        onClose={onAddPromoModalOpenChange}
-        title="Add Promo"
-      />
-      <ViewPromoModal
-        isOpen={isViewPromoModalOpen}
-        onClose={onCloseDetailPromoModal}
-        title="Promo Details"
-        promoData={selectedPromo}
-      />
-      <DeletePromoModal
-        isOpen={isDeletePromoModalOpen}
-        onClose={onCloseDeletePromoModal}
-        title="Delete Promo Confirmation"
-        promoData={selectedPromo}   
-      />
-      <EditPromoModal
-        isOpen={isEditPromoModalOpen}
-        onClose={onCloseEditPromoModal}
-        title="Edit Promo Confirmation"
-        promoData={selectedPromo}   
+      <EditGajiModal
+        isOpen={isEditGajiModalOpen}
+        onClose={onCloseEditGajiModal}
+        title="Edit Gaji"
+        gajiData={selectedGaji}
+        jabatanData={dataJabatan}
       />
     </div>
   );

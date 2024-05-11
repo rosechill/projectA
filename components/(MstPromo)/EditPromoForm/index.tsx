@@ -59,6 +59,7 @@ const EditPromoForm: React.FC<EditPromoFormProps> = ({
 
   return (
     <div className="flex flex-col justify-center">
+      <ToastContainer/>
       <h2 className="font-semibold">Masukkan data baru Promo:</h2>
       <form
         onSubmit={handleSubmit(onSubmitted)}

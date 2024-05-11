@@ -48,7 +48,7 @@ export default function PromoForm({ onClose }: PromoFormProps) {
   const onSubmitted = (data: DataPromoForm) => {
     apiCreatePromo(data)
       .then(() => {
-        toast("Login success");
+        toast("Add promo success");
 
         setTimeout(() => {
           window.location.reload();
