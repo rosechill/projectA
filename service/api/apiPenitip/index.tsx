@@ -62,10 +62,7 @@ export const apiDeletePenitip = async (id: number) => {
   return apiDeletePenitip;
 };
 
-export const apiEditPenitip = async (
-  id: number,
-  body: { name: string;  }
-) => {
+export const apiEditPenitip = async (id: number, body: { name: string }) => {
   try {
     await satellite.put(
       `https://jurwawe.sga.dom.my.id/api/penitip/update/${id}`,

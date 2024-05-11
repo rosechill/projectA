@@ -5,18 +5,25 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 interface ViewModalProps {
-  isOpen: boolean
-  onClose: () => void
-  title: string
-  produkData: any | null
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  produkData: any | null;
 }
 
-const ViewProdukTitipanModal: React.FC<ViewModalProps> = ({ isOpen, onClose, title, produkData }) => {
-  if (!isOpen) return null
+const ViewProdukTitipanModal: React.FC<ViewModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  produkData,
+}) => {
+  if (!isOpen) return null;
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
+    <Modal isOpen={isOpen} onClose={onClose} size="4xl">
       <ModalContent>
-        <ModalHeader className="bg-[#0370C3] text-primary-50 justify-center">{title}</ModalHeader>
+        <ModalHeader className="bg-[#0370C3] text-primary-50 justify-center">
+          {title}
+        </ModalHeader>
         <ModalBody>
           {produkData && (
             <div className="flex flex-col gap-2 pt-2 h-fit">
@@ -52,18 +59,28 @@ const ViewProdukTitipanModal: React.FC<ViewModalProps> = ({ isOpen, onClose, tit
                   <Button className='w-fit bg-white border-2 border-[#0370C3]'>Lihat Full Gambar</Button>
                 </Link>
               </div>
-              <Image src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`} alt="Gambar" width={300} height={300}/>
+              <Image
+                src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`}
+                alt="Gambar"
+                width={300}
+                height={300}
+              />
             </div>
           )}
         </ModalBody>
         <ModalFooter>
-          <Button className="border-1 border-[#0370C3] bg-primary min-w-[100px] text-white" variant="flat" size="md" onClick={onClose}>
+          <Button
+            className="border-1 border-[#0370C3] bg-primary min-w-[100px] text-white"
+            variant="flat"
+            size="md"
+            onClick={onClose}
+          >
             Close
           </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};
 
-export default ViewProdukTitipanModal
+export default ViewProdukTitipanModal;
