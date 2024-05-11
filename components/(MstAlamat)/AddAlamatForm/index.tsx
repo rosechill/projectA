@@ -6,31 +6,31 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
-import { DataJabatanForm } from "@/interfaces/JabatanInterface";
-import { apiCreateJabatan } from "@/service/api/apiJabatan";
-import { DataJabatan } from "@/interfaces/JabatanInterface";
-import apiGetJabatan from "@/service/api/apiJabatan";
+import { DataAlamatForm } from "@/interfaces/AlamatInterface";
+import { apiCreateAlamat } from "@/service/api/apiAlamat";
+import { DataAlamat } from "@/interfaces/AlamatInterface";
+import apiGetAlamat from "@/service/api/apiAlamat";
 
-interface JabatanFormProps {
+interface AlamatFormProps {
   onClose: () => void;
 }
 
 const schema = yup.object({
-  name: yup
+  alamat: yup
     .string()
-    .required("jabatan harus diisi")
-    .min(1, "jabatan minimal 1"),
+    .required("alamat harus diisi")
+    .min(1, "alamat minimal 1 kata"),
 });
 
-export default function JabatanForm({ onClose }: JabatanFormProps) {
-  const [jabatans, setJabatans] = useState<DataJabatan[]>([]);
+export default function AlamatForm({ onClose }: AlamatFormProps) {
+  const [Alamats, setAlamats] = useState<DataAlamat[]>([]);
   const [selectedValue, setSelectedValue] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiGetJabatan();
-        setJabatans(response.data.data);
+        const response = await apiGetAlamat();
+        setAlamats(response.data.data);
       } catch (error) {
         console.error(error);
       }
@@ -43,9 +43,9 @@ export default function JabatanForm({ onClose }: JabatanFormProps) {
     setSelectedValue(key as any);
   };
 
-  const form = useForm<DataJabatanForm>({
+  const form = useForm<DataAlamatForm>({
     defaultValues: {
-      name: "",
+      alamat: "",
     },
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -56,10 +56,10 @@ export default function JabatanForm({ onClose }: JabatanFormProps) {
     formState: { errors, isValid },
   } = form;
 
-  const onSubmitted = (data: DataJabatanForm) => {
-    apiCreateJabatan(data)
+  const onSubmitted = (data: DataAlamatForm) => {
+    apiCreateAlamat(data)
       .then(() => {
-        toast("Tambah Jabatan berhasil");
+        toast("Tambah Alamat berhasil");
 
         setTimeout(() => {
           window.location.reload();
@@ -74,14 +74,14 @@ export default function JabatanForm({ onClose }: JabatanFormProps) {
     <>
       <ToastContainer />
       <div className="flex flex-col justify-center">
-        <h2 className="font-semibold">Masukkan data Jabatan:</h2>
+        <h2 className="font-semibold">Masukkan data Alamat:</h2>
         <form
           onSubmit={handleSubmit(onSubmitted)}
           className="w-full flex flex-col gap-6 pt-6"
         >
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative ">
             <Input
-              {...register("name")}
+              {...register("alamat")}
               type="text"
               labelPlacement="outside"
               label="Nama"
@@ -90,7 +90,7 @@ export default function JabatanForm({ onClose }: JabatanFormProps) {
               className="font-semibold"
             />
             <p className="ms-3 text-sm pt-4 text-red-500 min-h-[20px] absolute -bottom-6 right-4">
-              {errors.name?.message}
+              {errors.alamat?.message}
             </p>
           </div>
           <div className="flex gap-4 justify-end pt-6 pb-2">
@@ -113,7 +113,7 @@ export default function JabatanForm({ onClose }: JabatanFormProps) {
               type="submit"
               disabled={!isValid}
             >
-              Add Jabatan
+              Add Alamat
             </Button>
           </div>
         </form>

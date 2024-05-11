@@ -1,39 +1,37 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Input, Button } from "@nextui-org/react";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@nextui-org/react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { DataJabatan, DataJabatanForm } from "@/interfaces/JabatanInterface";
-import { apiEditJabatan } from "@/service/api/apiJabatan";
-import apiGetJabatan from "@/service/api/apiJabatan";
+import { DataAlamat, DataAlamatForm } from "@/interfaces/AlamatInterface";
+import { apiEditAlamat } from "@/service/api/apiAlamat";
+import apiGetAlamat from "@/service/api/apiAlamat";
+import alamat from "@/app/(Customer)/alamat/page";
 
-interface EditJabatanFormProps {
+interface EditAlamatFormProps {
   onClose: () => void;
-  JabatanData: DataJabatan | null;
+  AlamatData: DataAlamat | null;
 }
 
 const schema = yup.object({
-  name: yup.string().required("nama harus diisi").min(1, "nama minimal 1"),
+  alamat: yup
+    .string()
+    .required("alamat harus diisi")
+    .min(1, "alamat minimal 1"),
 });
 
-const EditJabatanForm: React.FC<EditJabatanFormProps> = ({
-  JabatanData,
+const EditAlamatForm: React.FC<EditAlamatFormProps> = ({
+  AlamatData,
   onClose,
 }) => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["Jabatan"]));
-  const [jabatans, setJabatans] = useState<DataJabatan[]>([]);
-  const form = useForm<DataJabatanForm>({
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["Alamat"]));
+  const [Alamats, setAlamats] = useState<DataAlamat[]>([]);
+  const form = useForm<DataAlamatForm>({
     defaultValues: {
-      name: JabatanData?.name,
+      alamat: AlamatData?.alamat,
     },
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -47,9 +45,9 @@ const EditJabatanForm: React.FC<EditJabatanFormProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiGetJabatan();
-        setJabatans(response.data.data);
-        console.log(setJabatans);
+        const response = await apiGetAlamat();
+        setAlamats(response.data.data);
+        console.log(setAlamats);
       } catch (error) {
         console.error(error);
       }
@@ -57,11 +55,11 @@ const EditJabatanForm: React.FC<EditJabatanFormProps> = ({
     fetchData();
   }, []);
 
-  const onSubmitted = (data: DataJabatanForm) => {
-    const JabatanDataHandler = JabatanData!;
-    apiEditJabatan({
-      id: JabatanDataHandler.id,
-      name: data.name,
+  const onSubmitted = (data: DataAlamatForm) => {
+    const AlamatDataHandler = AlamatData!;
+    apiEditAlamat({
+      id: AlamatDataHandler.id,
+      alamat: data.alamat,
     })
       .then(() => {
         toast("Edit success");
@@ -70,30 +68,30 @@ const EditJabatanForm: React.FC<EditJabatanFormProps> = ({
         }, 3000);
       })
       .catch((error) => {
-        toast("Edit Failed");
+        toast.error(error.message);
       });
   };
 
   return (
     <div className="flex flex-col justify-center">
       <ToastContainer />
-      <h2 className="font-semibold">Masukkan data baru Jabatan:</h2>
+      <h2 className="font-semibold">Masukkan data baru Alamat:</h2>
       <form
         onSubmit={handleSubmit(onSubmitted)}
         className="w-full flex flex-col gap-6 pt-6"
       >
         <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative">
           <Input
-            {...register("name")}
+            {...register("alamat")}
             type="text"
             labelPlacement="outside"
-            label="name"
-            placeholder="Masukkan name jika ingin diubah"
+            label="alamat"
+            placeholder="Masukkan alamat jika ingin diubah"
             size="lg"
             className="font-semibold"
           />
           <p className="ms-3 text-sm pt-4 text-red-500 min-h-[20px] absolute -bottom-6 right-4 ">
-            {errors.name?.message}
+            {errors.alamat?.message}
           </p>
         </div>
         <div className="flex gap-4 justify-end pt-6 pb-2">
@@ -116,7 +114,7 @@ const EditJabatanForm: React.FC<EditJabatanFormProps> = ({
             type="submit"
             disabled={!isValid}
           >
-            Edit Jabatan
+            Edit Alamat
           </Button>
         </div>
       </form>
@@ -124,4 +122,4 @@ const EditJabatanForm: React.FC<EditJabatanFormProps> = ({
   );
 };
 
-export default EditJabatanForm;
+export default EditAlamatForm;
