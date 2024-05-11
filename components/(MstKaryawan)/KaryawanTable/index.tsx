@@ -33,6 +33,8 @@ import { columns } from "@/utils/columnsTable/dataKaryawan";
 import apiGetKaryawan from "@/service/api/apiKaryawan";
 import ViewKaryawanModal from "../ViewKaryawanModal";
 import AddKaryawanModal from "../AddKaryawanModal";
+import EditKaryawanModal from "../EditKaryawanModal";
+import DeleteKaryawanModal from "../DeleteKaryawanModal";
 
 const INITIAL_VISIBLE_COLUMNS = ["id", "name", "jabatan", "actions"];
 
@@ -59,17 +61,56 @@ export default function KaryawanTable() {
   const [selectedKaryawan, setSelectedKaryawan] = useState<DataKaryawan | null>(
     null
   );
+  // View Karyawan Modal
   const {
     isOpen: isViewKaryawanModalOpen,
     onOpenChange: onViewKaryawanModalOpenChange,
   } = useDisclosure();
+
+  // Open Karyawan Details Modal
   const openKaryawanDetailsModal = (karyawans: DataKaryawan) => {
     setSelectedKaryawan(karyawans);
     onViewKaryawanModalOpenChange();
   };
+
+  // Close Karyawan Details Modal
   const onCloseKaryawanModal = () => {
     setSelectedKaryawan(null);
     onViewKaryawanModalOpenChange();
+  };
+
+  // Edit Karyawan modal
+  const {
+    isOpen: isEditKaryawanModalOpen,
+    onOpenChange: onEditKaryawanModalOpenChange,
+  } = useDisclosure();
+
+  // Selected Karyawan
+  const openKaryawanEditModal = (karyawans: DataKaryawan) => {
+    setSelectedKaryawan(karyawans);
+    onEditKaryawanModalOpenChange();
+  };
+
+  // Close Edit Karyawan Modal
+  const onCloseEditKaryawanModal = () => {
+    setSelectedKaryawan(null);
+    onEditKaryawanModalOpenChange();
+  };
+
+  // Delete Karyawan Modal
+  const {
+    isOpen: isDeleteKaryawanModalOpen,
+    onOpenChange: onDeleteKaryawanModalOpenChange,
+  } = useDisclosure();
+
+  const openKaryawanDeleteModal = (karyawans: DataKaryawan) => {
+    setSelectedKaryawan(karyawans);
+    onDeleteKaryawanModalOpenChange();
+  };
+
+  const onCloseDeleteKaryawanModal = () => {
+    setSelectedKaryawan(null);
+    onDeleteKaryawanModalOpenChange();
   };
 
   useEffect(() => {
@@ -158,7 +199,10 @@ export default function KaryawanTable() {
                 className="p-1.5 rounded-lg border border-white"
                 content="Edit Karyawan"
               >
-                <span className="text-xl text-success cursor-pointer active:opacity-50">
+                <span
+                  onClick={() => openKaryawanEditModal(karyawan)}
+                  className="text-xl text-success cursor-pointer active:opacity-50"
+                >
                   <IconEdit />
                 </span>
               </Tooltip>
@@ -167,7 +211,10 @@ export default function KaryawanTable() {
                 className="p-1.5"
                 content="Delete Karyawan"
               >
-                <span className="text-xl text-danger cursor-pointer active:opacity-50">
+                <span
+                  onClick={() => openKaryawanDeleteModal(karyawan)}
+                  className="text-xl text-danger cursor-pointer active:opacity-50"
+                >
                   <IconDelete />
                 </span>
               </Tooltip>
@@ -244,7 +291,7 @@ export default function KaryawanTable() {
               </DropdownMenu>
             </Dropdown>
             <Button
-                onClick={onAddKaryawanModalOpenChange}
+              onClick={onAddKaryawanModalOpenChange}
               className="bg-[#0370C3] text-background"
               endContent={<PlusIcon />}
               size="md"
@@ -357,11 +404,27 @@ export default function KaryawanTable() {
             )}
           </TableBody>
         </Table>
-        <AddKaryawanModal isOpen={isAddKaryawanModalOpen} onClose={onAddKaryawanModalOpenChange} title="Add User" />
+        <AddKaryawanModal
+          isOpen={isAddKaryawanModalOpen}
+          onClose={onAddKaryawanModalOpenChange}
+          title="Add User"
+        />
         <ViewKaryawanModal
           isOpen={isViewKaryawanModalOpen}
           onClose={onCloseKaryawanModal}
           title="Karyawan Details"
+          karyawanData={selectedKaryawan}
+        />
+        <EditKaryawanModal
+          isOpen={isEditKaryawanModalOpen}
+          onClose={onCloseEditKaryawanModal}
+          title="Edit Karyawan Confirmation"
+          karyawanData={selectedKaryawan}
+        />
+        <DeleteKaryawanModal
+          isOpen={isDeleteKaryawanModalOpen}
+          onClose={onCloseDeleteKaryawanModal}
+          title="Delete Karyawan Confirmation"
           karyawanData={selectedKaryawan}
         />
       </div>

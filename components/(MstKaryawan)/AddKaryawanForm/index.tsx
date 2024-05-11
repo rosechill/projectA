@@ -20,33 +20,25 @@ import apiGetJabatan from "@/service/api/apiJabatan";
 
 interface KaryawanFormProps {
   onClose: () => void;
+  dataPenitip: any;
 }
 
 const schema = yup.object({
   name: yup.string().required("nama harus diisi").min(1, "nama minimal 1"),
   jabatan: yup.object({
     id: yup.number().required("jabatan harus diisi"),
-    name: yup.string().required("jabatan harus diisi"),
-    created_at: yup.string().required("jabatan harus diisi"),
-    updated_at: yup.string().required("jabatan harus diisi"),
   }),
 });
 
 export default function KaryawanForm({ onClose }: KaryawanFormProps) {
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["user"]));
   const [jabatans, setJabatans] = useState<DataJabatan[]>([]);
-
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
+  const [selectedValue, setSelectedValue] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await apiGetJabatan();
         setJabatans(response.data.data);
-        console.log(setJabatans);
       } catch (error) {
         console.error(error);
       }
@@ -54,14 +46,16 @@ export default function KaryawanForm({ onClose }: KaryawanFormProps) {
     fetchData();
   }, []);
 
+  const handleSelectionChange = (keys: any) => {
+    const key = Array.from(keys)[0];
+    setSelectedValue(key as any);
+  };
+
   const form = useForm<DataKaryawanForm>({
     defaultValues: {
       name: "",
       jabatan: {
         id: 0,
-        name: "",
-        created_at: "",
-        updated_at: "",
       },
     },
     resolver: yupResolver(schema),
@@ -113,10 +107,19 @@ export default function KaryawanForm({ onClose }: KaryawanFormProps) {
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative">
             <Dropdown>
               <DropdownTrigger>
-                <Button variant="bordered">Open Menu</Button>
+                <Button variant="bordered">Pilih Jabatan</Button>
               </DropdownTrigger>
-              <DropdownMenu aria-label="Dynamic Actions" items={jabatans}>
-                {(item) => (
+              <DropdownMenu
+                items={jabatans}
+                variant="flat"
+                aria-labelledby="dropdown-button"
+                disallowEmptySelection
+                selectionMode="single"
+                selectedKeys={selectedValue !== 0 ? [selectedValue] : []}
+                onSelectionChange={handleSelectionChange}
+                className="max-h-[300px] overflow-y-scroll"
+              >
+                {(item: DataJabatan) => (
                   <DropdownItem key={item.id}>
                     {item.id} - {item.name}
                   </DropdownItem>
@@ -147,7 +150,7 @@ export default function KaryawanForm({ onClose }: KaryawanFormProps) {
               type="submit"
               disabled={!isValid}
             >
-              Add User
+              Add Karyawan
             </Button>
           </div>
         </form>

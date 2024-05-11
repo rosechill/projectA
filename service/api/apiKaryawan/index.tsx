@@ -39,43 +39,46 @@ export const apiCreateKaryawan = async (body: DataKaryawanForm) => {
   await satellite
     .post(`https://jurwawe.sga.dom.my.id/api/karyawan/store`, body, {
       headers: {
-        Authorization: `Bearer ${read('__TOKEN__')}`,
+        Authorization: `Bearer ${read("__TOKEN__")}`,
       },
     })
-    .catch(err => {
-      throw err.response.data
+    .catch((err) => {
+      throw err.response.data;
     })
-    .then(() => {})
-  return apiCreateKaryawan
-}
-
-export const apiEditKaryawan = async (body: {id?: number, name: string;}) => {
-  await satellite
-    .put(`https://jurwawe.sga.dom.my.id/api/karyawan/update/${body.id}`, body, {
-      headers: {
-        Authorization: `Bearer ${read('__TOKEN__')}`,
-      },
-    })
-    .catch(err => {
-      throw err.response.data
-    })
-    .then(() => {})
-  return apiEditKaryawan
-}
+    .then(() => {});
+  return apiCreateKaryawan;
+};
 
 export const apiDeleteKaryawan = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/karyawan/update/${id}`, {
+    .delete(`https://jurwawe.sga.dom.my.id/api/karyawan/destroy/${id}`, {
       headers: {
-        Authorization: `Bearer ${read('__TOKEN__')}`,
-      },
-      data: {
-        id: id,
+        Authorization: `Bearer ${read("__TOKEN__")}`,
       },
     })
-    .catch(err => {
-      throw err.response.data
+    .catch((err) => {
+      throw err.response.data;
     })
-    .then(() => {})
-  return apiDeleteKaryawan
-}
+    .then(() => {});
+  return apiDeleteKaryawan;
+};
+
+export const apiEditKaryawan = async (
+  id: number,
+  body: { name: string; jabatan: { id: number } }
+) => {
+  try {
+    await satellite.put(
+      `https://jurwawe.sga.dom.my.id/api/karyawan/update/${id}`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      }
+    );
+    return "Success";
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
