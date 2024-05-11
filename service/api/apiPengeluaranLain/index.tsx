@@ -1,6 +1,9 @@
 "use server";
 
-import { DataPengeluaranLain, DataPengeluaranLainForm } from "@/interfaces/PengeluaranLainInterface";
+import {
+  DataPengeluaranLain,
+  DataPengeluaranLainForm,
+} from "@/interfaces/PengeluaranLainInterface";
 import satellite from "@/service/satellite";
 import { read } from "@/store/cookies";
 
@@ -35,7 +38,9 @@ const apiGetPengeluaranLain = () => {
 
 export default apiGetPengeluaranLain;
 
-export const apiCreatePengeluaranLain = async (body: DataPengeluaranLainForm) => {
+export const apiCreatePengeluaranLain = async (
+  body: DataPengeluaranLainForm
+) => {
   await satellite
     .post(`https://jurwawe.sga.dom.my.id/api/pengeluaran-lainnya/store`, body, {
       headers: {
@@ -51,11 +56,14 @@ export const apiCreatePengeluaranLain = async (body: DataPengeluaranLainForm) =>
 
 export const apiDeletePengeluaranLain = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/pengeluaran-lainnya/destroy/${id}`, {
-      headers: {
-        Authorization: `Bearer ${read("__TOKEN__")}`,
-      },
-    })
+    .delete(
+      `https://jurwawe.sga.dom.my.id/api/pengeluaran-lainnya/destroy/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      }
+    )
     .catch((err) => {
       throw err.response.data;
     })

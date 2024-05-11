@@ -57,7 +57,7 @@ const EditProdukForm: React.FC<EditProdukForm> = ({ produkData, onClose }) => {
     form.append("kuota_harian", produkData.kuota_harian);
     form.append("harga", produkData.harga);
     console.log(produkData.id);
-    console.log(getId)
+    console.log(getId);
     apiEditProduk(getId as number, form as any)
       .then(() => {
         toast("Edit success");
@@ -137,7 +137,12 @@ const EditProdukForm: React.FC<EditProdukForm> = ({ produkData, onClose }) => {
             </p>
           </div>
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative items-center justify-center ">
-            <Image src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`} alt="Gambar" width={200} height={200}/>
+            <Image
+              src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`}
+              alt="Gambar"
+              width={200}
+              height={200}
+            />
             <input
               {...register("gambar")}
               type="file"

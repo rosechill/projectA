@@ -10,16 +10,16 @@ import { IconFilledEye, IconFilledEyeSlash } from "@/assets/icons";
 import Link from "next/link";
 import apiLogin from "@/service/api/apiLogin";
 import { setItem } from "@/store/storage";
-import { useRouter } from 'next/navigation'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const schema = yup.object({
   email: yup.string().required("Email harus diisi"),
   password: yup.string().required("Password harus diisi"),
 });
 
 export default function LoginForm() {
-  const router = useRouter()
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -45,19 +45,22 @@ export default function LoginForm() {
     };
 
     apiLogin(body)
-    .then(res => {
-      setItem('__DATA__', JSON.stringify(res))
-      console.log(res)
-      console.log(res.data.data.role)
-      toast('Login success')
-      router.push(`/${res.data.data.role}`)
-    })
-    .catch(() => {
-      toast.error('Login failed')
-    })
+      .then((res) => {
+        setItem("__DATA__", JSON.stringify(res));
+        console.log(res);
+        console.log(res.data.data.role);
+        toast("Login success");
+        router.push(`/${res.data.data.role}`);
+      })
+      .catch(() => {
+        toast.error("Login failed");
+      });
   };
   return (
-    <form onSubmit={handleSubmit(onSubmitted)} className="w-full flex flex-col gap-8 pt-4 ">
+    <form
+      onSubmit={handleSubmit(onSubmitted)}
+      className="w-full flex flex-col gap-8 pt-4 "
+    >
       <ToastContainer />
       <div className="relative">
         <Input
@@ -111,21 +114,28 @@ export default function LoginForm() {
           {errors.password?.message}
         </p>
       </div>
-      <Link href={"/"}>
-        <Button
-          className={`${
-            isValid
-              ? "bg-[#B02525] text-white "
-              : "bg-[#B02525]/40 text-white/40"
-          } w-3/4 mt-4`}
-          variant="flat"
-          size="md"
-          type="submit"
-          disabled={!isValid}
-        >
-          Masuk
-        </Button>
-      </Link>
+      <div>
+        <h1 className="w-3/4 text-end">
+          <Link href="/lupa-password" className="font-semibold underline">
+            Lupa password?
+          </Link>
+        </h1>
+        <Link href={"/"}>
+          <Button
+            className={`${
+              isValid
+                ? "bg-[#B02525] text-white "
+                : "bg-[#B02525]/40 text-white/40"
+            } w-3/4 mt-4`}
+            variant="flat"
+            size="md"
+            type="submit"
+            disabled={!isValid}
+          >
+            Masuk
+          </Button>
+        </Link>
+      </div>
     </form>
   );
 }

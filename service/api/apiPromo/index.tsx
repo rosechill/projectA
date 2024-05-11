@@ -63,15 +63,22 @@ export const apiDeletePromo = async (id: number) => {
   return apiDeletePromo;
 };
 
-export const apiEditPromo = async (id: number, body: { kelipatan: number; bonus_poin: number }) => {
-    try {
-      await satellite.put(`https://jurwawe.sga.dom.my.id/api/promo-poin/update/${id}`, body, {
+export const apiEditPromo = async (
+  id: number,
+  body: { kelipatan: number; bonus_poin: number }
+) => {
+  try {
+    await satellite.put(
+      `https://jurwawe.sga.dom.my.id/api/promo-poin/update/${id}`,
+      body,
+      {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
-      });
-      return "Success";
-    } catch (error:any) {
-      throw error.response.data;
-    }
-  };
+      }
+    );
+    return "Success";
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};

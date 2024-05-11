@@ -36,7 +36,7 @@ const apiGetProduk = () => {
 export default apiGetProduk;
 
 export const apiCreateProduk = async (form: any) => {
- try {
+  try {
     const response = await axios.post(
       `https://jurwawe.sga.dom.my.id/api/produk/store`,
       form,
@@ -47,16 +47,13 @@ export const apiCreateProduk = async (form: any) => {
         },
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error: any) {
     throw error.response.data;
   }
 };
 
-export const apiEditProduk = async (
-  id: number,
-  body: { form:any }
-) => {
+export const apiEditProduk = async (id: number, body: { form: any }) => {
   try {
     await satellite.post(
       `https://jurwawe.sga.dom.my.id/api/produk/update/${id}`,
