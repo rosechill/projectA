@@ -32,6 +32,7 @@ import { DataKaryawan } from "@/interfaces/KaryawanInterface";
 import { columns } from "@/utils/columnsTable/dataKaryawan";
 import apiGetKaryawan from "@/service/api/apiKaryawan";
 import ViewKaryawanModal from "../ViewKaryawanModal";
+import AddKaryawanModal from "../AddKaryawanModal";
 
 const INITIAL_VISIBLE_COLUMNS = ["id", "name", "jabatan", "actions"];
 
@@ -49,6 +50,11 @@ export default function KaryawanTable() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [karyawans, setKaryawans] = useState<DataKaryawan[]>([]);
+
+  const {
+    isOpen: isAddKaryawanModalOpen,
+    onOpenChange: onAddKaryawanModalOpenChange,
+  } = useDisclosure();
 
   const [selectedKaryawan, setSelectedKaryawan] = useState<DataKaryawan | null>(
     null
@@ -238,6 +244,7 @@ export default function KaryawanTable() {
               </DropdownMenu>
             </Dropdown>
             <Button
+                onClick={onAddKaryawanModalOpenChange}
               className="bg-[#0370C3] text-background"
               endContent={<PlusIcon />}
               size="md"
@@ -350,6 +357,7 @@ export default function KaryawanTable() {
             )}
           </TableBody>
         </Table>
+        <AddKaryawanModal isOpen={isAddKaryawanModalOpen} onClose={onAddKaryawanModalOpenChange} title="Add User" />
         <ViewKaryawanModal
           isOpen={isViewKaryawanModalOpen}
           onClose={onCloseKaryawanModal}
