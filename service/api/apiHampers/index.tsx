@@ -1,0 +1,87 @@
+"use server";
+
+import { DataHampers, DataHampersForm } from "@/interfaces/HampersInterfaces";
+import satellite from "@/service/satellite";
+import { read } from "@/store/cookies";
+import axios, { Axios } from "axios";
+
+let hampersPromise: Promise<any> | null = null;
+
+const apiGetHampers = () => {
+  if (hampersPromise) {
+    return hampersPromise;
+  }
+  hampersPromise = new Promise((resolve, reject) => {
+    satellite
+      .get(`https://jurwawe.sga.dom.my.id/api/hampers/index`, {
+        headers: {
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      })
+      .then((response: { data: DataHampers }) => {
+        const storageData = response.data;
+        resolve({ status: "success", data: storageData });
+      })
+      .catch((error) => {
+        reject(error);
+      })
+      .finally(() => {
+        hampersPromise = null;
+      });
+  });
+
+  return hampersPromise;
+};
+
+export default apiGetHampers;
+
+export const apiCreateHampers = async (form: any) => {
+//   throw (form);
+  try {
+    const response = await axios.post(
+      `https://jurwawe.sga.dom.my.id/api/hampers/store`,
+      form,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const apiEditHampers = async (id: number, form: any) => {
+  // throw body.form;
+  try {
+    await satellite.post(
+      `https://jurwawe.sga.dom.my.id/api/hampers/update/${id as number}`,
+      form,
+      {
+        headers: {
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      }
+    );
+    return "Success";
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const apiDeleteHampers = async (id: number) => {
+  await satellite
+    .delete(`https://jurwawe.sga.dom.my.id/api/hampers/destroy/${id}`, {
+      headers: {
+        Authorization: `Bearer ${read("__TOKEN__")}`,
+      },
+    })
+    .catch((err) => {
+      throw err.response.data;
+    })
+    .then(() => {});
+  return apiDeleteHampers;
+};
