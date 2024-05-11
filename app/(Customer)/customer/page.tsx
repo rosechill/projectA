@@ -2,14 +2,30 @@
 
 import { FotoProfile } from "@/assets/images";
 import { DataPesanan, DataUser } from "@/interfaces/UserInterface";
-import { apiEditCustomerName, apiGetHistoryPesanan, apiGetUserProfile } from "@/service/api/apiUser";
+import {
+  apiEditCustomerName,
+  apiGetHistoryPesanan,
+  apiGetUserProfile,
+} from "@/service/api/apiUser";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { Card, CardHeader, Divider, CardBody } from "@nextui-org/react";
+import { Card, CardHeader, Divider, CardBody, Input } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function mstCustomer() {
   const [user, setUser] = useState<DataUser | null>(null);
   const [history, setHistory] = React.useState<DataPesanan[]>([]);
+
+  const form = useForm<DataUser>({
+    defaultValues: {
+      name: user?.name,
+    },
+    mode: "onChange",
+  });
+
+  const { register, handleSubmit } = form;
 
   const fetchDataUser = async () => {
     try {
@@ -33,10 +49,17 @@ export default function mstCustomer() {
     });
   }, []);
 
-  const handleUpdateName = async () => {
+  const handleUpdateName = async (data : any) => {
     try {
-      const response = await apiEditCustomerName();
-      console.log("Update name response:", response); 
+      let form = new FormData();
+
+      form.append("name", data.name);
+      console.log(data)
+      const response = await apiEditCustomerName(form);
+      if(response === "Success"){
+        fetchDataUser();
+        toast("Berhasil mengubah nama");
+      }
     } catch (error) {
       console.log("Error updating name:", error);
     }
@@ -44,6 +67,7 @@ export default function mstCustomer() {
 
   return (
     <div className="w-full h-auto p-4 ">
+      <ToastContainer />
       <div className="flex justify-between gap-4">
         <div className="p-4 w-1/3 shadow-xl bg-gray-100">
           <div className="flex flex-col gap-6 items-center justify-center">
@@ -60,19 +84,24 @@ export default function mstCustomer() {
             <div className="px-3 py-2 bg-blue-300 rounded-lg border-gray-100">
               {user?.email}
             </div>
-            <form className="flex flex-col gap-4">
-              <label htmlFor="name" className="font-semibold">
-                Edit Name:
-              </label>
-              <input
-                type="text"
-                id="name"
-                className="px-3 py-2 border border-gray-300 rounded-lg"
-                value={user?.name || ""}
-              />
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit(handleUpdateName)}
+            >
+              <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative ">
+                <Input
+                  {...register("name")}
+                  type="string"
+                  labelPlacement="outside"
+                  label="Edit nama:"
+                  placeholder="Masukkan nama hampers"
+                  size="lg"
+                  className="font-semibold"
+                />
+              </div>
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-                onClick={handleUpdateName}
+                type="submit"
               >
                 Update Name
               </button>
@@ -80,7 +109,6 @@ export default function mstCustomer() {
           </div>
         </div>
         <div className="w-3/5">
-          
           {history?.length > 0 ? (
             <div className="flex flex-col gap-4 w-full">
               <p className="font-semibold text-center ">History Pesanan</p>

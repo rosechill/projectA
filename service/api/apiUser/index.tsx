@@ -37,14 +37,18 @@ const apiGetUser = () => {
 
 export default apiGetUser;
 
-export const apiGetHistoryPesanan = async ({ id }: { id: number |null| string| undefined }) => {
+export const apiGetHistoryPesanan = async ({
+  id,
+}: {
+  id: number | null | string | undefined;
+}) => {
   if (userAccountPromise) {
     return userAccountPromise;
   }
 
-  if(id == null){
+  if (id == null) {
     const getToken = await read("__USERID__");
-    id  = getToken
+    id = getToken;
   }
 
   userAccountPromise = new Promise((resolve, reject) => {
@@ -100,10 +104,14 @@ export const apiGetUserProfile = () => {
   return userAccountPromise;
 };
 
-export const apiEditCustomerName = async () => {
+
+export const apiEditCustomerName = async ( form: FormData ) => {
   try {
     await satellite.put(
-      `https://jurwawe.sga.dom.my.id/api/auth/updateCustomer/}`,
+      `https://jurwawe.sga.dom.my.id/api/user/update/`,
+      {
+        name: form.get("name"),
+      },
       {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
