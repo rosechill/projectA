@@ -25,6 +25,10 @@ export const dataMenuAdmin: DataMenu[] = [
     path: "/mstUser",
   },
   {
+    name: "mstHistoryPesanan",
+    path: "/mstHistoryPesanan",
+  },
+  {
     name: "mstPromo",
     path: "/mstPromo",
   },
@@ -52,61 +56,61 @@ export const dataMenuAdmin: DataMenu[] = [
 
 export const dataMenuMO: DataMenu[] = [
   {
-    name: "mo", 
+    name: "mo",
     path: "/mo",
   },
   {
-    name: "mstJabatan", 
+    name: "mstJabatan",
     path: "/mstJabatan",
   },
   {
-    name: "mstKaryawan", 
+    name: "mstKaryawan",
     path: "/mstKaryawan",
   },
   {
-    name: "mstPenitip", 
+    name: "mstPenitip",
     path: "/mstPenitip",
   },
   {
-    name: "mstPembelianBahanBuku", 
-    path: "/mstPembelianBahanBuku",
+    name: "mstPembelianBahanBaku",
+    path: "/mstPembelianBahanBaku",
   },
   {
-    name: "mstPengeluaranLain", 
+    name: "mstPengeluaranLain",
     path: "/mstPengeluaranLain",
   },
   {
-    name: "mstPresensi", 
+    name: "mstPresensi",
     path: "/mstPresensi",
   },
 ];
 
 export const dataMenuCustomer: DataMenu[] = [
   {
-    name: "customer", 
+    name: "customer",
     path: "/customer",
   },
   {
-    name: "userProfile", 
+    name: "userProfile",
     path: "/userProfile",
   },
   {
-    name: "alamat", 
+    name: "alamat",
     path: "/alamat",
   },
 ];
 
 export const dataMenuOwner: DataMenu[] = [
   {
-    name: "owner", 
+    name: "owner",
     path: "/owner",
   },
   {
-    name: "mstJabatan", 
+    name: "mstJabatan",
     path: "/mstJabatan",
   },
   {
-    name: "mstKaryawan", 
+    name: "mstKaryawan",
     path: "/mstKaryawan",
   },
 ];
