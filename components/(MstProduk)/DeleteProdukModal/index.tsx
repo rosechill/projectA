@@ -9,34 +9,34 @@ import {
   Button,
 } from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
-import { DataPromo } from "@/interfaces/PromoInterface";
-import { apiDeletePromo } from "@/service/api/apiPromo";
-import 'react-toastify/dist/ReactToastify.css';
+import { DataProduk } from "@/interfaces/ProdukInterface";
+import { apiDeleteProduk } from "@/service/api/apiProduk";
+
 interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  promoData: DataPromo | null;
+  produkData: DataProduk | null;
 }
 
-const DeletePromoModal: React.FC<DeleteModalProps> = ({
+const DeleteProdukModal: React.FC<DeleteModalProps> = ({
   isOpen,
   onClose,
   title,
-  promoData,
+  produkData,
 }) => {
   if (!isOpen) return null;
 
   const handleSubmit = () => {
-    const promoDataHandler = promoData!;
-    apiDeletePromo(promoDataHandler.id)
+    const produkDataHandler = produkData!;
+    apiDeleteProduk(produkDataHandler.id)
       .then(() => {
         toast("Delete success")
         setTimeout(() => {
           window.location.reload();
         }, 3000);
       })
-      .catch((error) => {
+      .catch((error:any) => {
         toast.error("Delete Failed");
       });
   };
@@ -49,11 +49,11 @@ const DeletePromoModal: React.FC<DeleteModalProps> = ({
             {title}
           </ModalHeader>
           <ModalBody>
-            {promoData && (
+            {produkData && (
               <div className="flex flex-col gap-2 pt-2">
                 <h2>
-                  Apakah ada yakin akan menghapus promo {" "}
-                  <span className="font-semibold">{promoData.id}</span> ?
+                  Apakah ada yakin akan menghapus produk dengan nama {" "}
+                  <span className="font-semibold">{produkData.name}</span> ?
                 </h2>
               </div>
             )}
@@ -74,7 +74,7 @@ const DeletePromoModal: React.FC<DeleteModalProps> = ({
               variant="flat"
               size="md"
             >
-              Delete Promo
+              Delete Produk
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -84,4 +84,4 @@ const DeletePromoModal: React.FC<DeleteModalProps> = ({
   );
 };
 
-export default DeletePromoModal;
+export default DeleteProdukModal;

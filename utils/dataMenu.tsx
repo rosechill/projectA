@@ -33,6 +33,10 @@ export const dataMenuAdmin: DataMenu[] = [
     path: "/mstProduk",
   },
   {
+    name: "mstProdukTitipan",
+    path: "/mstProdukTitipan",
+  },
+  {
     name: "mstResep",
     path: "/mstResep",
   },

@@ -60,14 +60,14 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
   };
   return (
     <div
-      className={`flex flex-col sticky top-0 bg-[#dcd9d9] will-change-transform h-screen  ${
+      className={`relative bg-[#dcd9d9] will-change-transform min-h-screen  ${
         isOpen ? "open-animation" : "close-animation"
       }`}
     >
-      <div className="">
+      <div className="relative">
         {isOpen && (
-          <>
-            <div className="w-[300px] min-w-[300px]  will-change-transform flex flex-col justify-between h-full ">
+          <div className="sticky left-0 top-0 h-screen flex flex-col justify-between">
+            <div className="w-[300px] min-w-[300px]  will-change-transform flex flex-col ">
               <div className="">
                 <div className="flex justify-center items-center h-[10vh] ">
                   <Image src={AtmaKitchen} alt="logo" width={200} height={50} />
@@ -84,7 +84,7 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
                 </ul>
               </div>
             </div>
-            <div className="px-12 w-full flex items-end h-full">
+            <div className="px-12 pb-12 w-full flex items-end">
               <Button
                 onClick={handleLogout}
                 color="danger"
@@ -94,12 +94,15 @@ export default function MenuAdmin({ role }: { readonly role: string }) {
                 Logout
               </Button>
             </div>
-          </>
+          </div>
         )}
+        <button
+          onClick={toggleMenu}
+          className="absolute top-8 -right-9 z-10 text-white"
+        >
+          {isOpen ? <IconClose /> : <IconHamburger />}
+        </button>
       </div>
-      <button onClick={toggleMenu} className="absolute top-8 -right-9 z-10 text-white">
-        {isOpen ? <IconClose  /> : <IconHamburger />}
-      </button>
     </div>
   );
 }
