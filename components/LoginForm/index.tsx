@@ -50,7 +50,7 @@ export default function LoginForm() {
         console.log(res);
         console.log(res.data.data.role);
         toast("Login success");
-        router.push(`/${res.data.data.role}`);
+        router.push(`/`);
       })
       .catch(() => {
         toast.error("Login failed");

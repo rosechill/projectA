@@ -22,12 +22,7 @@ export default function Container({
 }>) {
   const pathname = usePathname();
 
-  if (
-    pathname !== "/login" &&
-    pathname !== "/daftar" &&
-    pathname !== "/lupa-password" &&
-    pathname !== "/reset-password"
-  ) {
+  if (pathname !== "/login" && pathname !== "/daftar") {
     let matchedMenu = null;
 
     if (dataMenuAdmin.some((menu) => menu.path === pathname)) {
@@ -61,7 +56,7 @@ export default function Container({
       return (
         <div className="overflow-x-hidden">
           <ContainerProvider>
-            <Navigation />
+            <Navigation role={role}/>
             <div className="pt-[10vh]">{children}</div>
             <Footer />
           </ContainerProvider>

@@ -36,3 +36,32 @@ const apiGetUser = () => {
 };
 
 export default apiGetUser;
+
+export const apiGetUserProfile = () => {
+  if (userAccountPromise) {
+    return userAccountPromise;
+  }
+
+  userAccountPromise = new Promise((resolve, reject) => {
+    satellite
+      .get(`https://jurwawe.sga.dom.my.id/api/user/profile/`, {
+        headers: {
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      })
+      .then((response: { data: DataUser }) => {
+        const storageData = response.data;
+        console.log(storageData);
+        resolve({ status: "success", data: storageData });
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      })
+      .finally(() => {
+        userAccountPromise = null;
+      });
+  });
+
+  return userAccountPromise;
+}; 
