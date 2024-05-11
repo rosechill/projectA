@@ -34,22 +34,22 @@ const ViewPengeluaranLainModal: React.FC<ViewModalProps> = ({
           {pengeluaranLainData && (
             <div className="flex flex-col gap-2 pt-2">
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Id Pengeluaran Lain</p>
+                <p className="w-[125px] font-semibold">Id</p>
                 <p>: </p>
                 <p>{pengeluaranLainData.id}</p>
               </div>
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Bonus Poin</p>
+                <p className="w-[125px] font-semibold">Nama</p>
                 <p>: </p>
                 <p>{pengeluaranLainData.name}</p>
               </div>
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Kelipatan</p>
+                <p className="w-[125px] font-semibold">Total Harga</p>
                 <p>: </p>
                 <p>{pengeluaranLainData.total_harga}</p>
               </div>
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Kelipatan</p>
+                <p className="w-[125px] font-semibold">Waktu</p>
                 <p>: </p>
                 <p>{pengeluaranLainData.waktu.toString()}</p>
               </div>

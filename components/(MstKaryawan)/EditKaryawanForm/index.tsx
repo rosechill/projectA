@@ -1,11 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Input, Button } from "@nextui-org/react";
+import React, { useState, useEffect, Key } from "react";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
+  Input,
+  Button,
+  Autocomplete,
+  AutocompleteItem,
 } from "@nextui-org/react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,24 +23,19 @@ interface EditKaryawanFormProps {
 
 const schema = yup.object({
   name: yup.string().required("nama harus diisi").min(1, "nama minimal 1"),
-  jabatan: yup.object({
-    id: yup.number().required("jabatan harus diisi"),
-    name: yup.string().required("jabatan harus diisi"),
-  }),
+  jabatan_id: yup.number().required("jabatan harus diisi"),
 });
 
 const EditKaryawanForm: React.FC<EditKaryawanFormProps> = ({
   karyawanData,
   onClose,
 }) => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["karyawan"]));
+  const [selectedValue, setSelectedValue] = useState<string>("");
   const [jabatans, setJabatans] = useState<DataJabatan[]>([]);
   const form = useForm<DataKaryawanForm>({
     defaultValues: {
       name: karyawanData?.name,
-      jabatan: {
-        id: karyawanData?.jabatan.id,
-      },
+      jabatan_id: karyawanData?.jabatan_id,
     },
   });
   const {
@@ -62,6 +56,13 @@ const EditKaryawanForm: React.FC<EditKaryawanFormProps> = ({
     };
     fetchData();
   }, []);
+
+  const handleSelectionChange = (value: Key | null) => {
+    const selectedJabatan = jabatans.find(
+      (item) => item.id == (value as number)
+    );
+    setSelectedValue(`${selectedJabatan?.id} - ${selectedJabatan?.name}`);
+  };
 
   const onSubmitted = (data: DataKaryawanForm) => {
     const karyawanDataHandler = karyawanData!;
@@ -99,20 +100,24 @@ const EditKaryawanForm: React.FC<EditKaryawanFormProps> = ({
           </p>
         </div>
         <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="bordered">Pilih Jabatan</Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Dynamic Actions" items={jabatans}>
-              {(item) => (
-                <DropdownItem key={item.id}>
-                  {item.id} - {item.name}
-                </DropdownItem>
-              )}
-            </DropdownMenu>
-          </Dropdown>
+          <Autocomplete
+            {...register("jabatan_id")}
+            label="Jabatan"
+            variant="bordered"
+            defaultItems={jabatans}
+            placeholder="Pilih Jabatan"
+            onSelectionChange={handleSelectionChange}
+            inputValue={selectedValue}
+            fullWidth
+          >
+            {(item) => (
+              <AutocompleteItem key={item.id}>
+                {item.id} - {item.name}
+              </AutocompleteItem>
+            )}
+          </Autocomplete>
           <p className="ms-3 text-sm pt-4 text-red-500 min-h-[20px] absolute -bottom-6 right-4 ">
-            {errors.jabatan?.id?.message}
+            {errors.jabatan_id?.message}
           </p>
         </div>
         <div className="flex gap-4 justify-end pt-6 pb-2">

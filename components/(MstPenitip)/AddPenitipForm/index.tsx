@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { DataPenitip, DataPenitipForm } from "@/interfaces/PenitipInterface";
+import { DataPenitipForm } from "@/interfaces/PenitipInterface";
 import { apiCreatePenitip } from "@/service/api/apiPenitip";
 interface PenitipFormProps {
   onClose: () => void;
@@ -20,13 +20,6 @@ const schema = yup.object({
 });
 
 export default function PenitipForm({ onClose }: PenitipFormProps) {
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["user"]));
-
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
-
   const form = useForm<DataPenitipForm>({
     defaultValues: {
       name: "",
@@ -43,8 +36,7 @@ export default function PenitipForm({ onClose }: PenitipFormProps) {
   const onSubmitted = (data: DataPenitipForm) => {
     apiCreatePenitip(data)
       .then(() => {
-        toast("Login success");
-
+        toast("Berhasil Menambah Penitip");
         setTimeout(() => {
           window.location.reload();
         }, 3000);
@@ -66,10 +58,10 @@ export default function PenitipForm({ onClose }: PenitipFormProps) {
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative ">
             <Input
               {...register("name")}
-              type="number"
+              type="text"
               labelPlacement="outside"
-              label="bonus poin"
-              placeholder="Masukkan bonus poin"
+              label="Nama"
+              placeholder="Masukkan nama"
               size="lg"
               className="font-semibold"
             />

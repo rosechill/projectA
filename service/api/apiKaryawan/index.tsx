@@ -65,7 +65,7 @@ export const apiDeleteKaryawan = async (id: number) => {
 
 export const apiEditKaryawan = async (
   id: number,
-  body: { name: string; jabatan: { id: number } }
+  body: { name: string; jabatan_id: number }
 ) => {
   try {
     await satellite.put(

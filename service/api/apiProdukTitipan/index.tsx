@@ -62,7 +62,7 @@ export const apiGetProdukTitipanPenitip = () => {
 };
 
 export const apiCreateProdukTitipan = async (form: any) => {
- try {
+  try {
     const response = await axios.post(
       `https://jurwawe.sga.dom.my.id/api/produk-titipan/store`,
       form,
@@ -73,7 +73,7 @@ export const apiCreateProdukTitipan = async (form: any) => {
         },
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error: any) {
     throw error.response.data;
   }

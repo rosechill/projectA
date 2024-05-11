@@ -179,7 +179,7 @@ export default function KaryawanTable() {
         case "name":
           return <div>{karyawan.name}</div>;
         case "jabatan":
-          return <div>{karyawan.jabatan.name}</div>;
+          return <div>{karyawan.jabatan_id}</div>;
         case "actions":
           return (
             <div className="relative flex items-center gap-4">
