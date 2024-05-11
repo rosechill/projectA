@@ -47,7 +47,7 @@ export default function PengeluaranLainForm({
   const onSubmitted = (data: DataPengeluaranLainForm) => {
     apiCreatePengeluaranLain(data)
       .then(() => {
-        toast("Login success");
+        toast("Berhasil Menambah Data Pengeluaran");
 
         setTimeout(() => {
           window.location.reload();

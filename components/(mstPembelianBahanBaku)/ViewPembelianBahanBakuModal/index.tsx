@@ -8,20 +8,21 @@ import {
   ModalFooter,
   Button,
 } from "@nextui-org/react";
-import { DataPengeluaranLain } from "@/interfaces/PengeluaranLainInterface";
+import { DataKaryawan } from "@/interfaces/KaryawanInterface";
+import { DataPembelianBahanBaku } from "@/interfaces/PembelianBahanBaku";
 
 interface ViewModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  pengeluaranLainData: DataPengeluaranLain | null;
+  pembelianData: DataPembelianBahanBaku | null;
 }
 
-const ViewPengeluaranLainModal: React.FC<ViewModalProps> = ({
+const ViewPembelianBahanBakuModal: React.FC<ViewModalProps> = ({
   isOpen,
   onClose,
   title,
-  pengeluaranLainData,
+  pembelianData,
 }) => {
   if (!isOpen) return null;
   return (
@@ -31,34 +32,39 @@ const ViewPengeluaranLainModal: React.FC<ViewModalProps> = ({
           {title}
         </ModalHeader>
         <ModalBody>
-          {pengeluaranLainData && (
+          {pembelianData && (
             <div className="flex flex-col gap-2 pt-2">
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Id</p>
+                <p className="w-[125px] font-semibold">Id Pembelian</p>
                 <p>: </p>
-                <p>{pengeluaranLainData.id}</p>
+                <p>{pembelianData.id}</p>
               </div>
               <div className="flex gap-4">
-                <p className="w-[125px] font-semibold">Nama</p>
+                <p className="w-[125px] font-semibold">Bahan Baku</p>
                 <p>: </p>
-                <p>{pengeluaranLainData.name}</p>
+                <p>{pembelianData.bahan_baku.name}</p>
+              </div>
+              <div className="flex gap-4">
+                <p className="w-[125px] font-semibold">Jumlah</p>
+                <p>: </p>
+                <p>{pembelianData.jumlah}</p>
               </div>
               <div className="flex gap-4">
                 <p className="w-[125px] font-semibold">Total Harga</p>
                 <p>: </p>
-                <p>{pengeluaranLainData.total_harga}</p>
+                <p>{pembelianData.total_harga}</p>
               </div>
               <div className="flex gap-4">
                 <p className="w-[125px] font-semibold">Waktu</p>
                 <p>: </p>
-                <p>{pengeluaranLainData.waktu.toString()}</p>
+                <p>{pembelianData.waktu.toDateString()}</p>
               </div>
             </div>
           )}
         </ModalBody>
         <ModalFooter>
           <Button
-            className="border-1 border-[#0370C3] bg-primary min-w-[100px] text-white"
+            className="border-1 border-[#0370C3] bg-primary min-w-[100px]"
             variant="flat"
             size="md"
             onClick={onClose}
@@ -71,4 +77,4 @@ const ViewPengeluaranLainModal: React.FC<ViewModalProps> = ({
   );
 };
 
-export default ViewPengeluaranLainModal;
+export default ViewPembelianBahanBakuModal;

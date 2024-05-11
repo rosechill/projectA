@@ -67,7 +67,7 @@ export const apiEditPenitip = async (
   body: { name: string;  }
 ) => {
   try {
-    await satellite.put(
+    await satellite.post(
       `https://jurwawe.sga.dom.my.id/api/penitip/update/${id}`,
       body,
       {
