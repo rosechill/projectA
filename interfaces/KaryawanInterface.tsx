@@ -1,17 +1,10 @@
 export interface DataKaryawan {
   id: number;
   name: string;
-  jabatan: {
-    id: number;
-    name: string;
-    created_at: string;
-    updated_at: string;
-  };
+  jabatan_id: number;
 }
 
 export interface DataKaryawanForm {
   name: string;
-  jabatan: {
-    id: number;
-  };
+  jabatan_id: number;
 }

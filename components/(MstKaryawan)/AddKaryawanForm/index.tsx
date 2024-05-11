@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, ReactElement, Key } from "react";
 import {
   Input,
   Button,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
+  Autocomplete,
+  AutocompleteItem,
 } from "@nextui-org/react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,22 +15,20 @@ import { DataKaryawanForm } from "@/interfaces/KaryawanInterface";
 import { apiCreateKaryawan } from "@/service/api/apiKaryawan";
 import { DataJabatan } from "@/interfaces/JabatanInterface";
 import apiGetJabatan from "@/service/api/apiJabatan";
+import { set } from "firebase/database";
 
 interface KaryawanFormProps {
   onClose: () => void;
-  dataPenitip: any;
 }
 
 const schema = yup.object({
   name: yup.string().required("nama harus diisi").min(1, "nama minimal 1"),
-  jabatan: yup.object({
-    id: yup.number().required("jabatan harus diisi"),
-  }),
+  jabatan_id: yup.number().required("jabatan harus diisi"),
 });
 
 export default function KaryawanForm({ onClose }: KaryawanFormProps) {
   const [jabatans, setJabatans] = useState<DataJabatan[]>([]);
-  const [selectedValue, setSelectedValue] = useState<number>(0);
+  const [selectedValue, setSelectedValue] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,17 +42,17 @@ export default function KaryawanForm({ onClose }: KaryawanFormProps) {
     fetchData();
   }, []);
 
-  const handleSelectionChange = (keys: any) => {
-    const key = Array.from(keys)[0];
-    setSelectedValue(key as any);
+  const handleSelectionChange = (value: Key | null) => {
+    const selectedJabatan = jabatans.find(
+      (item) => item.id == (value as number)
+    );
+    setSelectedValue(`${selectedJabatan?.id} - ${selectedJabatan?.name}`);
   };
 
   const form = useForm<DataKaryawanForm>({
     defaultValues: {
       name: "",
-      jabatan: {
-        id: 0,
-      },
+      jabatan_id: 0,
     },
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -68,9 +64,12 @@ export default function KaryawanForm({ onClose }: KaryawanFormProps) {
   } = form;
 
   const onSubmitted = (data: DataKaryawanForm) => {
+    const selectedJabatanId = selectedValue.split(" - ")[0];
+    console.log(selectedJabatanId);
+    data.jabatan_id = parseInt(selectedJabatanId);
     apiCreateKaryawan(data)
       .then(() => {
-        toast("Login success");
+        toast("Berhasil Menambah Karyawan");
 
         setTimeout(() => {
           window.location.reload();
@@ -105,29 +104,24 @@ export default function KaryawanForm({ onClose }: KaryawanFormProps) {
             </p>
           </div>
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button variant="bordered">Pilih Jabatan</Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                items={jabatans}
-                variant="flat"
-                aria-labelledby="dropdown-button"
-                disallowEmptySelection
-                selectionMode="single"
-                selectedKeys={selectedValue !== 0 ? [selectedValue] : []}
-                onSelectionChange={handleSelectionChange}
-                className="max-h-[300px] overflow-y-scroll"
-              >
-                {(item: DataJabatan) => (
-                  <DropdownItem key={item.id}>
-                    {item.id} - {item.name}
-                  </DropdownItem>
-                )}
-              </DropdownMenu>
-            </Dropdown>
+            <Autocomplete
+              {...register("jabatan_id")}
+              label="Jabatan"
+              variant="bordered"
+              defaultItems={jabatans}
+              placeholder="Pilih Jabatan"
+              onSelectionChange={handleSelectionChange}
+              inputValue={selectedValue}
+              fullWidth
+            >
+              {(item) => (
+                <AutocompleteItem key={item.id}>
+                  {item.id} - {item.name}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
             <p className="ms-3 text-sm pt-4 text-red-500 min-h-[20px] absolute -bottom-6 right-4 ">
-              {errors.jabatan?.id?.message}
+              {errors.jabatan_id?.message}
             </p>
           </div>
           <div className="flex gap-4 justify-end pt-6 pb-2">
