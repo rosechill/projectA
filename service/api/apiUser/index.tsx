@@ -37,7 +37,6 @@ const apiGetUser = () => {
 
 export default apiGetUser;
 
-
 export const apiGetHistoryPesanan = ({ id }: { id: number | undefined }) => {
   if (userAccountPromise) {
     return userAccountPromise;
@@ -94,4 +93,20 @@ export const apiGetUserProfile = () => {
   });
 
   return userAccountPromise;
-}; 
+};
+
+export const apiEditCustomerName = async () => {
+  try {
+    await satellite.put(
+      `https://jurwawe.sga.dom.my.id/api/auth/updateCustomer/}`,
+      {
+        headers: {
+          Authorization: `Bearer ${read("__TOKEN__")}`,
+        },
+      }
+    );
+    return "Success";
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
