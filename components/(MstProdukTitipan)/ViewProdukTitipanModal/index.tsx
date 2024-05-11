@@ -2,6 +2,7 @@
 import React from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@nextui-org/react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface ViewModalProps {
   isOpen: boolean
@@ -47,7 +48,9 @@ const ViewProdukTitipanModal: React.FC<ViewModalProps> = ({ isOpen, onClose, tit
               <div className="flex gap-4">
                 <p className="min-w-[150px] font-semibold">Path</p>
                 <p>: </p>
-                <p className='h-fit'>{produkData.gambar}</p>
+                <Link href={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`} target="_blank" className='h-fit'>
+                  <Button className='w-fit bg-white border-2 border-[#0370C3]'>Lihat Full Gambar</Button>
+                </Link>
               </div>
               <Image src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`} alt="Gambar" width={300} height={300}/>
             </div>
