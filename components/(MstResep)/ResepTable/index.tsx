@@ -170,7 +170,7 @@ export default function ResepTable() {
 
     if (hasSearchFilter) {
       filteredReseps = filteredReseps.filter((resep) =>
-        resep.id.toString().toLowerCase().includes(filterValue.toLowerCase())
+        resep.produk.name.toString().toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -454,7 +454,7 @@ export default function ResepTable() {
       <EditResepModal
         isOpen={isEditResepModalOpen}
         onClose={onCloseEditResepModal}
-        title="Delete resep Confirmation"
+        title="Edit resep Confirmation"
         resepData={selectedResep}
         dataProduk={dataProduk}
         dataBahanBaku={dataBahanBaku}

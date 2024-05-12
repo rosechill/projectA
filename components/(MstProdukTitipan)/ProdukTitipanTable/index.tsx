@@ -34,6 +34,7 @@ import ViewProdukTitipanModal from "../ViewProdukTitipanModal";
 import { DataProdukTitipan } from "@/interfaces/ProdukTitipanInterface";
 import { columns } from "@/utils/columnsTable/dataProdukTitipan";
 import apiGetProdukTitipan, { apiGetProdukTitipanPenitip } from "@/service/api/apiProdukTitipan";
+import { formatIDR } from "@/utils/constant";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "id",
@@ -101,7 +102,7 @@ export default function ProdukTitipanTable() {
       try {
         setLoading(true);
         const response = await apiGetProdukTitipan();
-        // console.log(response.data.data);
+        console.log(response.data.data);
         setProduks(response.data.data);
       } catch (error) {
         // console.log(error)
@@ -166,8 +167,8 @@ export default function ProdukTitipanTable() {
           return <div>{produk.id}</div>;
         case "kelipatan":
           return <div> {produk.name}</div>;
-        case "bonus_poin":
-          return <div>{produk.harga}</div>;
+        case "harga":
+          return <div>{formatIDR(produk.harga)}</div>;
 
         case "actions":
           return (
@@ -369,13 +370,13 @@ export default function ProdukTitipanTable() {
       <AddProdukTitipanModal
         isOpen={isAddProdukModalOpen}
         onClose={onAddProdukModalOpenChange}
-        title="Add produk"
+        title="Add produk titipan"
         dataPenitip = {dataPenitip}
       />
       <ViewProdukTitipanModal
         isOpen={isViewProdukModalOpen}
         onClose={onCloseDetailProdukModal}
-        title="produk Details"
+        title="produk titipan Details"
         produkData={selectedProduk}
       />
     </div>

@@ -35,6 +35,7 @@ import AddProdukModal from "../AddProdukModal";
 import ViewProdukModal from "../ViewProdukModal";
 import DeleteProdukModal from "../DeleteProdukModal";
 import EditProdukModal from "../EditProdukModal";
+import { formatIDR } from "@/utils/constant";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "id",
@@ -175,7 +176,7 @@ export default function ProdukTable() {
         case "kelipatan":
           return <div> {produk.name}</div>;
         case "bonus_poin":
-          return <div>{produk.harga}</div>;
+          return <div>{formatIDR(produk.harga)}</div>;
 
         case "actions":
           return (
@@ -414,7 +415,7 @@ export default function ProdukTable() {
       <EditProdukModal
         isOpen={isEditProdukModalOpen}
         onClose={onCloseEditProdukModal}
-        title="Delete produk Confirmation"
+        title="Edit produk Confirmation"
         produkData={selectedProduk}
       />
     </div>

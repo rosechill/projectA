@@ -3,6 +3,9 @@ export interface dataGaji {
     jabatan_id: number,
     gaji: number,
     bonus: number,
+    jabatan: {
+        name: string
+    }
 }
 
 export interface dataGajiForm {

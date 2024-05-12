@@ -35,6 +35,7 @@ import ViewPromoModal from "../ViewPromoModal";
 import AddPromoModal from "../AddPromoModal";
 import DeletePromoModal from "../DeletePromoModal";
 import EditPromoModal from "../EditPromoModal";
+import { formatIDR } from "@/utils/constant";
 const INITIAL_VISIBLE_COLUMNS = ["id", "kelipatan", "bonus_poin", "actions"];
 
 export default function PromoTable() {
@@ -167,10 +168,9 @@ export default function PromoTable() {
         case "id":
           return <div>{promo.id}</div>;
         case "kelipatan":
-          return <div> {promo.bonus_poin}</div>;
+          return <div> {formatIDR(promo.kelipatan)}</div>;
         case "bonus_poin":
-          return <div>{promo.kelipatan}</div>;
-
+          return <div>{promo.bonus_poin}</div>;
         case "actions":
           return (
             <div className="relative flex items-center gap-4">

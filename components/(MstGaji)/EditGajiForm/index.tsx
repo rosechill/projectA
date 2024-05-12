@@ -84,7 +84,7 @@ const EditGajiForm: React.FC<EditPromoFormProps> = ({
   return (
     <div className="flex flex-col justify-center">
       <ToastContainer/>
-      <h2 className="font-semibold">Masukkan data baru Promo:</h2>
+      <h2 className="font-semibold">Masukkan data baru Gaji:</h2>
       <form
         onSubmit={handleSubmit(onSubmitted)}
         className="w-full flex flex-col gap-6 pt-6"

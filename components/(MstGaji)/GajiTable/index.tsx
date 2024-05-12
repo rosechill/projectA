@@ -31,10 +31,11 @@ import { dataGaji } from "@/interfaces/GajiInterface";
 import { columns } from "@/utils/columnsTable/dataGaji";
 import apiGetGaji, { apiGetJabatanGaji } from "@/service/api/apiGaji";
 import EditGajiModal from "../EditGajiModal";
+import {formatIDR } from "@/utils/constant";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "id",
-  "jabatan_id",
+  "jabatan",
   "gaji",
   "bonus",
   "actions",
@@ -61,6 +62,7 @@ export default function GajiTable() {
     const fetchData = async () => {
       try {
         const response = await apiGetGaji();
+        console.log(response.data.data)
         setDataGajis(response.data.data);
       } catch (error) {
         //
@@ -118,7 +120,7 @@ export default function GajiTable() {
 
     if (hasSearchFilter) {
       filteredGajis = filteredGajis.filter((user) =>
-        user.id.toString().toLowerCase().includes(filterValue.toLowerCase())
+        user.jabatan.name.toString().toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -144,22 +146,21 @@ export default function GajiTable() {
   const renderCell = React.useCallback(
     (gaji: dataGaji, columnKey: React.Key) => {
       const cellValue = gaji[columnKey as keyof dataGaji];
-
       switch (columnKey) {
         case "id":
-          return <div>{gaji.id}</div>;
+          return <div>{gaji.id} </div>;
         case "jabatan":
-          return <div>{gaji.jabatan_id}</div>;
+          return <div>{gaji.jabatan_id} - {gaji.jabatan.name}</div>;
         case "gaji":
-          return <div> {gaji.gaji}</div>;
+          return <div> {formatIDR(gaji.gaji)}</div>;
         case "bonus":
-          return <div>{gaji.bonus}</div>;
+          return <div>{formatIDR(gaji.bonus)}</div>;
 
         case "actions":
           return (
             <div className="relative flex items-center gap-4">
               <Tooltip
-                content="Details"
+                content="Edit"
                 className="p-1.5 border rounded-lg bg-white border-blue-600"
               >
                 <span

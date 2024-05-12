@@ -158,7 +158,7 @@ export default function ProdukForm({ onClose }: ProdukFormProps) {
     <>
       <ToastContainer />
       <div className="flex flex-col justify-center">
-        <h2 className="font-semibold">Masukkan data Promo:</h2>
+        <h2 className="font-semibold">Masukkan data Hampers:</h2>
         <form
           onSubmit={handleSubmit(onSubmitted)}
           className="w-full flex flex-col gap-6 pt-6"

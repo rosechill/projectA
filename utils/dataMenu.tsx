@@ -79,20 +79,17 @@ export const dataMenuMO: DataMenu[] = [
     name: "mstPengeluaranLain",
     path: "/mstPengeluaranLain",
   },
-  {
-    name: "mstPresensi",
-    path: "/mstPresensi",
-  },
+  //ini ternyata di mobile 
+  // {
+  //   name: "mstPresensi",
+  //   path: "/mstPresensi",
+  // },
 ];
 
 export const dataMenuCustomer: DataMenu[] = [
   {
     name: "customer",
     path: "/customer",
-  },
-  {
-    name: "userProfile",
-    path: "/userProfile",
   },
   {
     name: "alamat",
@@ -106,11 +103,15 @@ export const dataMenuOwner: DataMenu[] = [
     path: "/owner",
   },
   {
-    name: "mstJabatan",
-    path: "/mstJabatan",
+    name: "gaji",
+    path: "/gaji",
   },
-  {
-    name: "mstKaryawan",
-    path: "/mstKaryawan",
-  },
+  // {
+  //   name: "mstJabatan",
+  //   path: "/mstJabatan",
+  // },
+  // {
+  //   name: "mstKaryawan",
+  //   path: "/mstKaryawan",
+  // },
 ];

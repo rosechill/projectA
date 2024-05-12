@@ -14,6 +14,7 @@ import {
 } from "@nextui-org/react";
 import { DataPesanan, DataUser } from "@/interfaces/UserInterface";
 import { apiGetHistoryPesanan } from "@/service/api/apiUser";
+import { formatIDR } from "@/utils/constant";
 
 interface ViewModalProps {
   isOpen: boolean;
@@ -88,24 +89,24 @@ const ViewUserModal: React.FC<ViewModalProps> = ({
                                 jarak :{item.jarak}
                               </p>
                               <p className="text-small text-default-500">
-                                ongkos kirim :{item.ongkos_kirim}
+                                ongkos kirim :{formatIDR(item.ongkos_kirim)}
                               </p>
                               <p className="text-small text-default-500">
-                                subtotal awal :{item.subtotal_awal}
+                                subtotal awal :{formatIDR(item.subtotal_awal)}
                               </p>
                               <p className="text-small text-default-500">
-                                subtotal akhir :{item.subtotal_akhir}
+                                subtotal akhir :{formatIDR(item.subtotal_akhir)}
                               </p>
                             </div>
                             <div>
                               <p className="text-small text-default-500">
-                                total tip :{item.total_tip}
+                                total tip :{formatIDR(item.total_tip)}
                               </p>
                               <p className="text-small text-default-500">
-                                potongan poin :{item.potongan_poin}
+                                potongan poin :{formatIDR(item.potongan_poin)}
                               </p>
                               <p className="text-small text-default-500">
-                                total poin :{item.total_poin}
+                                total poin :{formatIDR(item.total_poin)}
                               </p>
                             </div>
                             <div>
@@ -132,7 +133,7 @@ const ViewUserModal: React.FC<ViewModalProps> = ({
                                       Jumlah Pesanan: {item.jumlah}
                                     </p>
                                     <p className="text-md">
-                                      Total Harga: {item.total_harga}
+                                      Total Harga: {formatIDR(item.total_harga)}
                                     </p>
                                     <p className="text-md">
                                       Sisa: {item.is_sisaan ? "Ya" : "Tidak"}
@@ -148,7 +149,7 @@ const ViewUserModal: React.FC<ViewModalProps> = ({
                                         nama : {item.produk.name}
                                       </p>
                                       <p className="text-md">
-                                        harga: {item.produk.harga}
+                                        harga: {formatIDR(item.produk.harga)}
                                       </p>
                                     </div>
                                     <div>
@@ -157,7 +158,7 @@ const ViewUserModal: React.FC<ViewModalProps> = ({
                                         nama : {item.hampers.name}
                                       </p>
                                       <p className="text-md">
-                                        harga: {item.hampers.harga}
+                                        harga: {formatIDR(item.hampers.harga)}
                                       </p>
                                     </div>
                                     <div>
@@ -168,7 +169,7 @@ const ViewUserModal: React.FC<ViewModalProps> = ({
                                         nama : {item.produk_titipan.name}
                                       </p>
                                       <p className="text-md">
-                                        harga: {item.produk_titipan.harga}
+                                        harga: {formatIDR(item.produk_titipan.harga)}
                                       </p>
                                     </div>
                                   </div>

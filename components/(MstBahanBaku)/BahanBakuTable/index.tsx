@@ -410,7 +410,7 @@ export default function BahanBakuTable() {
       <EditBahanBakuModal
         isOpen={isEditBahanBakuModalOpen}
         onClose={onCloseEditBahanBakuModal}
-        title="Delete BahanBaku Confirmation"
+        title="Edit BahanBaku Confirmation"
         bahanBakuData={selectedBahanBaku}
       />
     </div>

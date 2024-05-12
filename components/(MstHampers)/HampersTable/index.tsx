@@ -35,6 +35,7 @@ import AddHampersModal from "../AddHampersModal";
 import ViewHampersModal from "../ViewHampersModal";
 import DeleteHampersModal from "../DeleteHampersModal";
 import EditHampersModal from "../EditHampersModal";
+import { formatIDR } from "@/utils/constant";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "id",
@@ -176,7 +177,7 @@ export default function HampersTable() {
         case "name":
           return <div> {hampers.name}</div>;
         case "harga":
-          return <div>{hampers.harga}</div>;
+          return <div>{formatIDR(hampers.harga)}</div>;
         case "kategori":
           return <div>{hampers.harga}</div>;
         case "gambar":
