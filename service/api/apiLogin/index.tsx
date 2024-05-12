@@ -16,8 +16,8 @@ const apiLogin = async (body: { email: string; password: string }) =>
       return { status: "status", data: storageData };
     })
     .catch((error) => {
-      throw error.response.data;
+      console.log(error.response.data);
+      return error.response.data;
     });
 
 export default apiLogin;
-

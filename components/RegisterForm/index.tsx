@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button, Input } from "@nextui-org/react";
 import { DataRegister } from "@/interfaces/RegisterInterface";
 import Link from "next/link";
-import apiRegister from "@/service/api/apiRegister";
+import { apiRegister } from "@/service/api/apiRegister";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { IconFilledEyeSlash } from "@/assets/icons";
@@ -16,13 +16,13 @@ const schema = yup.object({
   name: yup.string().required("Nama harus diisi").min(3, "Minimal 3 karakter"),
   email: yup.string().required("Email harus diisi"),
   password: yup
-  .string()
-  .min(6, "password minimal 6 karakter")
-  .matches(
-    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/,
-    "Password harus mengandung huruf kapital, angka, dan simbol"
-  )
-  .required("password baru harus diisi"),
+    .string()
+    .min(6, "password minimal 6 karakter")
+    .matches(
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
+      "Password harus mengandung huruf kapital, angka, dan simbol"
+    )
+    .required("password baru harus diisi"),
 });
 export default function RegisterForm() {
   const router = useRouter();
@@ -46,16 +46,36 @@ export default function RegisterForm() {
     formState: { errors, isValid },
   } = form;
 
-  const onSubmitted = (data: DataRegister) => {
-    console.log(data)
-    apiRegister(data)
-      .then((res) => {
-          toast("Register success");
+  const onSubmitted = async (data: DataRegister) => {
+    const loading = toast.loading("Silahkan tunggu sebentar...");
+
+    console.log(data);
+
+    try {
+      const res = await apiRegister(data);
+      if (res.status === 200 || res.status === 201) {
+        toast.update(loading, {
+          render:
+            "Pendaftaran Akun Berhasil! Silahkan cek email Anda untuk verifikasi akun Anda.",
+          type: "success",
+          autoClose: 10000,
+          closeButton: true,
+          isLoading: false,
+        });
+        setTimeout(() => {
           router.push("/login");
-      })
-      .catch(() => {
-        toast.error("Register failed");
+        }, 3000);
+      }
+    } catch (error: any) {
+      console.log(error.response.data.message);
+      toast.update(loading, {
+        render: error.response.data.message,
+        type: "error",
+        autoClose: 5000,
+        closeButton: true,
+        isLoading: false,
       });
+    }
   };
   return (
     <form

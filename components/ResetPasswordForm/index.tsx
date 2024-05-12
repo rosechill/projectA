@@ -17,7 +17,7 @@ const schema = yup.object({
     .string()
     .min(6, "password minimal 6 karakter")
     .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/,
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
       "Password harus mengandung huruf kapital, angka, dan simbol"
     )
     .required("password baru harus diisi"),
@@ -26,7 +26,7 @@ const schema = yup.object({
     .min(6, "password minimal 6 karakter")
     .oneOf([yup.ref("passwordNew")], "password tidak sama")
     .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/,
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
       "Password harus mengandung huruf kapital, angka, dan simbol"
     )
     .required("konfirmasi password baru harus diisi"),

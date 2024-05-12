@@ -4,7 +4,7 @@ import { DataUbahPassword } from "@/components/UbahPasswordBiasaForm";
 import satellite from "@/service/satellite";
 import { read } from "@/store/cookies";
 
-const apiLogin = async (body: { email: string }) =>
+const apiLupaPassword = async (body: { email: string }) => {
   await satellite
     .post("http://127.0.0.1:8000/api/auth/forgotPassword", body)
     .then((response) => {
@@ -15,9 +15,9 @@ const apiLogin = async (body: { email: string }) =>
       console.log(error.response.data);
       return error.response.data;
     });
-
-export default apiLogin;
-
+  return apiLupaPassword;
+};
+export default apiLupaPassword;
 
 export const apiUbahPasswordBiasa = async (body: DataUbahPassword) => {
   await satellite
@@ -41,7 +41,7 @@ export const apiUbahPasswordBiasa = async (body: DataUbahPassword) => {
 //       },
 //     })
 //     .then((response) => {
-      
+
 //     })
 //     .catch((err) => {
 //       throw err.response.data;

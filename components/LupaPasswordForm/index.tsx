@@ -43,10 +43,9 @@ export default function LupaPasswordForm() {
       email: data.email,
     };
 
-    const res = apiLupaPassword(body);
-    res
-      .then((res) => {
-        console.log(res);
+    apiLupaPassword(body)
+      .then((response) => {
+        console.log(response);
         toast.success(
           "Jika Benar Email Terdaftar, Link Reset Kata Sandi Akan Dikirim Ke Email Anda!"
         );
