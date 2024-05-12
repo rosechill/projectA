@@ -138,7 +138,7 @@ const EditProdukForm: React.FC<EditProdukForm> = ({ produkData, onClose }) => {
           </div>
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative items-center justify-center ">
             <Image
-              src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`}
+              src={`http://127.0.0.1:8000/storage/${produkData?.gambar}`}
               alt="Gambar"
               width={200}
               height={200}

@@ -13,7 +13,7 @@ const apiGetResep = () => {
   }
   resepPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/resep/index`, {
+      .get(`http://127.0.0.1:8000/api/resep/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -41,7 +41,7 @@ export const apiGetBahanBaku = () => {
   }
   resepPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/bahan-baku/index`, {
+      .get(`http://127.0.0.1:8000/api/bahan-baku/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -64,7 +64,7 @@ export const apiGetBahanBaku = () => {
 export const apiCreateResep = async (data: any) => {
  try {
     const response = await axios.post(
-      `https://jurwawe.sga.dom.my.id/api/resep/store`,
+      `http://127.0.0.1:8000/api/resep/store`,
       data,
       {
         headers: {
@@ -85,7 +85,7 @@ export const apiEditResep = async (
 ) => {
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/resep/update/${id}`,
+      `http://127.0.0.1:8000/api/resep/update/${id}`,
       body,
       {
         headers: {
@@ -101,7 +101,7 @@ export const apiEditResep = async (
 
 export const apiDeleteResep = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/resep/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/resep/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },

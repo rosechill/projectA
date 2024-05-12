@@ -13,7 +13,7 @@ const apiGetKaryawan = () => {
 
   karyawanAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/karyawan/index`, {
+      .get(`http://127.0.0.1:8000/api/karyawan/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -37,7 +37,7 @@ export default apiGetKaryawan;
 
 export const apiCreateKaryawan = async (body: DataKaryawanForm) => {
   await satellite
-    .post(`https://jurwawe.sga.dom.my.id/api/karyawan/store`, body, {
+    .post(`http://127.0.0.1:8000/api/karyawan/store`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -51,7 +51,7 @@ export const apiCreateKaryawan = async (body: DataKaryawanForm) => {
 
 export const apiDeleteKaryawan = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/karyawan/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/karyawan/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -69,7 +69,7 @@ export const apiEditKaryawan = async (
 ) => {
   try {
     await satellite.put(
-      `https://jurwawe.sga.dom.my.id/api/karyawan/update/${id}`,
+      `http://127.0.0.1:8000/api/karyawan/update/${id}`,
       body,
       {
         headers: {

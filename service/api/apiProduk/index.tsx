@@ -13,7 +13,7 @@ const apiGetProduk = () => {
   }
   produkPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/produk/index`, {
+      .get(`http://127.0.0.1:8000/api/produk/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -38,7 +38,7 @@ export default apiGetProduk;
 export const apiCreateProduk = async (form: any) => {
   try {
     const response = await axios.post(
-      `https://jurwawe.sga.dom.my.id/api/produk/store`,
+      `http://127.0.0.1:8000/api/produk/store`,
       form,
       {
         headers: {
@@ -56,7 +56,7 @@ export const apiCreateProduk = async (form: any) => {
 export const apiEditProduk = async (id: number, body: { form: any }) => {
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/produk/update/${id}`,
+      `http://127.0.0.1:8000/api/produk/update/${id}`,
       body,
       {
         headers: {
@@ -72,7 +72,7 @@ export const apiEditProduk = async (id: number, body: { form: any }) => {
 
 export const apiDeleteProduk = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/produk/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/produk/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },

@@ -13,7 +13,7 @@ const apiGetHampers = () => {
   }
   hampersPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/hampers/index`, {
+      .get(`http://127.0.0.1:8000/api/hampers/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -39,7 +39,7 @@ export const apiCreateHampers = async (form: any) => {
 //   throw (form);
   try {
     const response = await axios.post(
-      `https://jurwawe.sga.dom.my.id/api/hampers/store`,
+      `http://127.0.0.1:8000/api/hampers/store`,
       form,
       {
         headers: {
@@ -58,7 +58,7 @@ export const apiEditHampers = async (id: number, form: any) => {
   // throw body.form;
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/hampers/update/${id as number}`,
+      `http://127.0.0.1:8000/api/hampers/update/${id as number}`,
       form,
       {
         headers: {
@@ -74,7 +74,7 @@ export const apiEditHampers = async (id: number, form: any) => {
 
 export const apiDeleteHampers = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/hampers/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/hampers/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },

@@ -22,7 +22,7 @@ export default function Container({
 }>) {
   const pathname = usePathname();
 
-  if (pathname !== "/login" && pathname !== "/daftar") {
+  if (pathname !== "/login" && pathname !== "/daftar" && pathname !== "/lupa-password" && pathname !== "/reset-password") {
     let matchedMenu = null;
 
     if (dataMenuAdmin.some((menu) => menu.path === pathname)) {

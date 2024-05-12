@@ -11,7 +11,7 @@ const apiGetGaji = () => {
   }
   gajiPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/bonus-gaji/index`, {
+      .get(`http://127.0.0.1:8000/api/bonus-gaji/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -39,7 +39,7 @@ export const apiGetJabatanGaji = () => {
   }
   gajiPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/jabatan/index`, {
+      .get(`http://127.0.0.1:8000/api/jabatan/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -62,7 +62,7 @@ export const apiGetJabatanGaji = () => {
 export const apiEditGaji = async (id: number, body:dataGajiForm) => {
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/bonus-gaji/update/${id}`,
+      `http://127.0.0.1:8000/api/bonus-gaji/update/${id}`,
       body,
       {
         headers: {

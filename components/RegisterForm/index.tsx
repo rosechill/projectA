@@ -9,17 +9,27 @@ import Link from "next/link";
 import apiRegister from "@/service/api/apiRegister";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { IconFilledEyeSlash } from "@/assets/icons";
 import "react-toastify/dist/ReactToastify.css";
 
 const schema = yup.object({
-  name: yup.string().required("Nama harus diisi"),
+  name: yup.string().required("Nama harus diisi").min(3, "Minimal 3 karakter"),
   email: yup.string().required("Email harus diisi"),
-  password: yup.string().required("Password harus diisi"),
+  password: yup
+  .string()
+  .min(6, "password minimal 6 karakter")
+  .matches(
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/,
+    "Password harus mengandung huruf kapital, angka, dan simbol"
+  )
+  .required("password baru harus diisi"),
 });
 export default function RegisterForm() {
   const router = useRouter();
 
   const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
   const form = useForm<DataRegister>({
     defaultValues: {
       name: "",
@@ -37,21 +47,11 @@ export default function RegisterForm() {
   } = form;
 
   const onSubmitted = (data: DataRegister) => {
-    const body = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    };
-
-    apiRegister(body)
+    console.log(data)
+    apiRegister(data)
       .then((res) => {
-        console.log(res);
-        if (res.status === "status") {
           toast("Register success");
           router.push("/login");
-        } else {
-          toast.error(res.data.message); 
-        }
       })
       .catch(() => {
         toast.error("Register failed");
@@ -90,7 +90,7 @@ export default function RegisterForm() {
           radius="sm"
           color="default"
           variant="bordered"
-          type="text"
+          type="email"
           labelPlacement="outside"
           placeholder="Masukkan email"
           label="Email"
@@ -110,11 +110,24 @@ export default function RegisterForm() {
           radius="sm"
           color="default"
           variant="bordered"
-          type="text"
           labelPlacement="outside"
           placeholder="Masukkan password"
           label="Password"
           className="w-3/4"
+          endContent={
+            <button
+              className="focus:outline-none pb-2"
+              type="button"
+              onClick={toggleVisibility}
+            >
+              {isVisible ? (
+                <IconFilledEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+              ) : (
+                <IconFilledEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+              )}
+            </button>
+          }
+          type={isVisible ? "text" : "password"}
         />
         <span className="text-red-500 font-bold text-xl absolute -top-1 left-20">
           *

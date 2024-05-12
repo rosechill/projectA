@@ -16,7 +16,7 @@ const apiGetPembelianBahanBaku = () => {
   
     pembelianBahanBakuAccountPromise = new Promise((resolve, reject) => {
       satellite
-        .get(`https://jurwawe.sga.dom.my.id/api/pembelian-bahan-baku/index`, {
+        .get(`http://127.0.0.1:8000/api/pembelian-bahan-baku/index`, {
           headers: {
             Authorization: `Bearer ${read("__TOKEN__")}`,
           },
@@ -43,7 +43,7 @@ export const apiCreatePembelianBahanBaku = async (
 ) => {
   await satellite
     .post(
-      `https://jurwawe.sga.dom.my.id/api/pembelian-bahan-baku/store`,
+      `http://127.0.0.1:8000/api/pembelian-bahan-baku/store`,
       body,
       {
         headers: {
@@ -61,7 +61,7 @@ export const apiCreatePembelianBahanBaku = async (
 export const apiDeletePembelianBahanBaku = async (id: number) => {
   await satellite
     .delete(
-      `https://jurwawe.sga.dom.my.id/api/pembelian-bahan-baku/destroy/${id}`,
+      `http://127.0.0.1:8000/api/pembelian-bahan-baku/destroy/${id}`,
       {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
@@ -81,7 +81,7 @@ export const apiEditPembelianBahanBaku = async (
 ) => {
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/pembelian-bahan-baku/update/${id}`,
+      `http://127.0.0.1:8000/api/pembelian-bahan-baku/update/${id}`,
       body,
       {
         headers: {

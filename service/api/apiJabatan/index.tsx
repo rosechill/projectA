@@ -13,7 +13,7 @@ const apiGetJabatan = () => {
 
   jabatanAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/jabatan/index`, {
+      .get(`http://127.0.0.1:8000/api/jabatan/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -39,7 +39,7 @@ export default apiGetJabatan;
 
 export const apiCreateJabatan = async (body: DataJabatanForm) => {
   await satellite
-    .post(`https://jurwawe.sga.dom.my.id/api/jabatan/store`, body, {
+    .post(`http://127.0.0.1:8000/api/jabatan/store`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -54,7 +54,7 @@ export const apiCreateJabatan = async (body: DataJabatanForm) => {
 export const apiEditJabatan = async (body: { id?: number; name: string }) => {
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/jabatan/update/${body.id}`,
+      `http://127.0.0.1:8000/api/jabatan/update/${body.id}`,
       body,
       {
         headers: {
@@ -71,7 +71,7 @@ export const apiEditJabatan = async (body: { id?: number; name: string }) => {
 
 export const apiDeleteJabatan = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/jabatan/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/jabatan/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },

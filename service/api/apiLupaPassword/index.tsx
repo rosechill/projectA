@@ -6,7 +6,7 @@ import { read } from "@/store/cookies";
 
 const apiLogin = async (body: { email: string }) =>
   await satellite
-    .post("https://jurwawe.sga.dom.my.id/api/auth/forgotPassword", body)
+    .post("http://127.0.0.1:8000/api/auth/forgotPassword", body)
     .then((response) => {
       console.log(response.data);
       return response.data;
@@ -21,7 +21,7 @@ export default apiLogin;
 
 export const apiUbahPasswordBiasa = async (body: DataUbahPassword) => {
   await satellite
-    .put(`https://jurwawe.sga.dom.my.id/api/auth/changePassword`, body, {
+    .put(`http://127.0.0.1:8000/api/auth/changePassword`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -35,7 +35,7 @@ export const apiUbahPasswordBiasa = async (body: DataUbahPassword) => {
 
 // export const apiLogout = async () => {
 //   await satellite
-//     .get(`https://jurwawe.sga.dom.my.id/api/auth/logout`, {
+//     .get(`http://127.0.0.1:8000/api/auth/logout`, {
 //       headers: {
 //         Authorization: `Bearer ${read("__TOKEN__")}`,
 //       },

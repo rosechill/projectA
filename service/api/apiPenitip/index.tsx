@@ -12,7 +12,7 @@ const apiGetPenitip = () => {
   //   console.log(read('__TOKEN__'))
   penitipPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/penitip/index`, {
+      .get(`http://127.0.0.1:8000/api/penitip/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -36,7 +36,7 @@ export default apiGetPenitip;
 
 export const apiCreatePenitip = async (body: DataPenitipForm) => {
   await satellite
-    .post(`https://jurwawe.sga.dom.my.id/api/penitip/store`, body, {
+    .post(`http://127.0.0.1:8000/api/penitip/store`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -50,7 +50,7 @@ export const apiCreatePenitip = async (body: DataPenitipForm) => {
 
 export const apiDeletePenitip = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/penitip/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/penitip/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -65,7 +65,7 @@ export const apiDeletePenitip = async (id: number) => {
 export const apiEditPenitip = async (id: number, body: { name: string }) => {
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/penitip/update/${id}`,
+      `http://127.0.0.1:8000/api/penitip/update/${id}`,
       body,
       {
         headers: {

@@ -55,12 +55,12 @@ const ViewProdukTitipanModal: React.FC<ViewModalProps> = ({
               <div className="flex gap-4">
                 <p className="min-w-[150px] font-semibold">Path</p>
                 <p>: </p>
-                <Link href={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`} target="_blank" className='h-fit'>
+                <Link href={`http://127.0.0.1:8000/storage/${produkData?.gambar}`} target="_blank" className='h-fit'>
                   <Button className='w-fit bg-white border-2 border-[#0370C3]'>Lihat Full Gambar</Button>
                 </Link>
               </div>
               <Image
-                src={`https://jurwawe.sga.dom.my.id/storage/${produkData?.gambar}`}
+                src={`http://127.0.0.1:8000/storage/${produkData?.gambar}`}
                 alt="Gambar"
                 width={300}
                 height={300}

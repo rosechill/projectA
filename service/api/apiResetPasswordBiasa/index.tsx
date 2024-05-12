@@ -8,7 +8,7 @@ const apiLogin = async (body: {
   confirmPassword: string;
 }) =>
   await satellite
-    .post("https://jurwawe.sga.dom.my.id/api/auth/changePassword", body)
+    .post("http://127.0.0.1:8000/api/auth/changePassword", body)
     .then((response) => {
       console.log(response.data);
       return response.data;

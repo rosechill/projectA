@@ -13,7 +13,7 @@ const apiGetAlamat = () => {
 
   alamatAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/alamat/index`, {
+      .get(`http://127.0.0.1:8000/api/alamat/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -39,7 +39,7 @@ export default apiGetAlamat;
 
 export const apiCreateAlamat = async (body: DataAlamatForm) => {
   await satellite
-    .post(`https://jurwawe.sga.dom.my.id/api/alamat/store`, body, {
+    .post(`http://127.0.0.1:8000/api/alamat/store`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -54,7 +54,7 @@ export const apiCreateAlamat = async (body: DataAlamatForm) => {
 export const apiEditAlamat = async (body: { id?: number; alamat: string }) => {
   try {
     await satellite.put(
-      `https://jurwawe.sga.dom.my.id/api/alamat/update/${body.id}`,
+      `http://127.0.0.1:8000/api/alamat/update/${body.id}`,
       body,
       {
         headers: {
@@ -71,7 +71,7 @@ export const apiEditAlamat = async (body: { id?: number; alamat: string }) => {
 
 export const apiDeleteAlamat = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/alamat/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/alamat/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },

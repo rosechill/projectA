@@ -13,7 +13,7 @@ const apiGetUser = () => {
 
   userAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/admin/indexCustomer`, {
+      .get(`http://127.0.0.1:8000/api/admin/indexCustomer`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -53,7 +53,7 @@ export const apiGetHistoryPesanan = async ({
 
   userAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/user/historyPesanan/${id}`, {
+      .get(`http://127.0.0.1:8000/api/user/historyPesanan/${id}`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -82,7 +82,7 @@ export const apiGetUserProfile = () => {
 
   userAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/user/profile/`, {
+      .get(`http://127.0.0.1:8000/api/user/profile/`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -108,7 +108,7 @@ export const apiGetUserProfile = () => {
 export const apiEditCustomerName = async ( form: FormData ) => {
   try {
     await satellite.put(
-      `https://jurwawe.sga.dom.my.id/api/user/update/`,
+      `http://127.0.0.1:8000/api/user/update/`,
       {
         name: form.get("name"),
       },

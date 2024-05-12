@@ -238,7 +238,7 @@ const EditHampersForm: React.FC<EditHampersForm> = ({
           </div>
           <div className="flex flex-col w-full md:flex-nowrap md:mb-0 gap-4 relative items-center justify-center ">
             <Image
-              src={`https://jurwawe.sga.dom.my.id/storage/${hamperData?.gambar}`}
+              src={`http://127.0.0.1:8000/storage/${hamperData?.gambar}`}
               alt="Gambar"
               width={200}
               height={200}

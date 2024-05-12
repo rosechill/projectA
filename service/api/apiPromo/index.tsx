@@ -13,7 +13,7 @@ const apiGetPromo = () => {
   //   console.log(read('__TOKEN__'))
   promoPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/promo-poin/index`, {
+      .get(`http://127.0.0.1:8000/api/promo-poin/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -37,7 +37,7 @@ export default apiGetPromo;
 
 export const apiCreatePromo = async (body: DataPromoForm) => {
   await satellite
-    .post(`https://jurwawe.sga.dom.my.id/api/promo-poin/store`, body, {
+    .post(`http://127.0.0.1:8000/api/promo-poin/store`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -51,7 +51,7 @@ export const apiCreatePromo = async (body: DataPromoForm) => {
 
 export const apiDeletePromo = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/promo-poin/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/promo-poin/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -69,7 +69,7 @@ export const apiEditPromo = async (
 ) => {
   try {
     await satellite.put(
-      `https://jurwawe.sga.dom.my.id/api/promo-poin/update/${id}`,
+      `http://127.0.0.1:8000/api/promo-poin/update/${id}`,
       body,
       {
         headers: {

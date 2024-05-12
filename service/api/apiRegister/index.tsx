@@ -10,10 +10,7 @@ const apiRegister = async (body: {
   try {
     const response = await satellite.post(
       "http://127.0.0.1:8000/api/auth/register",
-      body,
-      {
-        headers: {},
-      }
+      body
     );
     console.log(response.data.message);
     return response.data.message;

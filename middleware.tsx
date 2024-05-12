@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const isLogin = request.cookies.get("__TOKEN__");
 
   const pathname = new URL(request.url).pathname;
-  const isPublicRoute = ["/login", "/daftar", "/"];
+  const isPublicRoute = ["/login", "/daftar", "/","/lupa-password","/reset-password"];
 
   if (
     !isPublicRoute.some((route) => {

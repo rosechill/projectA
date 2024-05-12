@@ -6,7 +6,7 @@ import { create, read } from "@/store/cookies";
 
 const apiLogin = async (body: { email: string; password: string }) =>
   await satellite
-    .post("https://jurwawe.sga.dom.my.id/api/auth/login", body, {})
+    .post("http://127.0.0.1:8000/api/auth/login", body, {})
     .then((response) => {
       create("__TOKEN__", response.data.data.token);
       create("__ROLE__", response.data.data.role);

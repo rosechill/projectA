@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['jurwawe.sga.dom.my.id'],
+        domains: ['127.0.0.1:8000', 'localhost:8000'],
     },
 };
 

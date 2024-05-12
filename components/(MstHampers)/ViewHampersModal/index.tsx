@@ -59,7 +59,7 @@ const ViewHampersModal: React.FC<ViewModalProps> = ({
                 <p className="w-[125px] font-semibold">Gambar Hampers</p>
                 <p>: </p>
                 <Image
-                  src={`https://jurwawe.sga.dom.my.id/storage/${hampersData.gambar}`}
+                  src={`http://127.0.0.1:8000/storage/${hampersData.gambar}`}
                   alt="Gambar"
                   width={300}
                   height={300}

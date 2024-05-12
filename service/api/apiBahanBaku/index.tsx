@@ -16,7 +16,7 @@ const apiGetBahanBaku = () => {
   }
   bahanBakuPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/bahan-baku/index`, {
+      .get(`http://127.0.0.1:8000/api/bahan-baku/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -41,7 +41,7 @@ export default apiGetBahanBaku;
 export const apiCreateBahanBaku = async (form: any) => {
   try {
     const response = await axios.post(
-      `https://jurwawe.sga.dom.my.id/api/bahan-baku/store`,
+      `http://127.0.0.1:8000/api/bahan-baku/store`,
       form,
       {
         headers: {
@@ -59,7 +59,7 @@ export const apiCreateBahanBaku = async (form: any) => {
 export const apiEditBahanBaku = async (id: number, body: { form: any }) => {
   try {
     await satellite.post(
-      `https://jurwawe.sga.dom.my.id/api/bahan-baku/update/${id}`,
+      `http://127.0.0.1:8000/api/bahan-baku/update/${id}`,
       body,
       {
         headers: {
@@ -75,7 +75,7 @@ export const apiEditBahanBaku = async (id: number, body: { form: any }) => {
 
 export const apiDeleteBahanBaku = async (id: number) => {
   await satellite
-    .delete(`https://jurwawe.sga.dom.my.id/api/bahan-baku/destroy/${id}`, {
+    .delete(`http://127.0.0.1:8000/api/bahan-baku/destroy/${id}`, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },

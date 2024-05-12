@@ -16,7 +16,7 @@ const apiGetPengeluaranLain = () => {
 
   pengeluaranLainAccountPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/pengeluaran-lainnya/index`, {
+      .get(`http://127.0.0.1:8000/api/pengeluaran-lainnya/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -42,7 +42,7 @@ export const apiCreatePengeluaranLain = async (
   body: DataPengeluaranLainForm
 ) => {
   await satellite
-    .post(`https://jurwawe.sga.dom.my.id/api/pengeluaran-lainnya/store`, body, {
+    .post(`http://127.0.0.1:8000/api/pengeluaran-lainnya/store`, body, {
       headers: {
         Authorization: `Bearer ${read("__TOKEN__")}`,
       },
@@ -57,7 +57,7 @@ export const apiCreatePengeluaranLain = async (
 export const apiDeletePengeluaranLain = async (id: number) => {
   await satellite
     .delete(
-      `https://jurwawe.sga.dom.my.id/api/pengeluaran-lainnya/destroy/${id}`,
+      `http://127.0.0.1:8000/api/pengeluaran-lainnya/destroy/${id}`,
       {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
@@ -77,7 +77,7 @@ export const apiEditPengeluaranLain = async (
 ) => {
   try {
     await satellite.put(
-      `https://jurwawe.sga.dom.my.id/api/pengeluaran-lainnya/update/${id}`,
+      `http://127.0.0.1:8000/api/pengeluaran-lainnya/update/${id}`,
       body,
       {
         headers: {

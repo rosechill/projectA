@@ -13,7 +13,7 @@ const apiGetProdukTitipan = () => {
   }
   produkTitipanPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/produk-titipan/index`, {
+      .get(`http://127.0.0.1:8000/api/produk-titipan/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -41,7 +41,7 @@ export const apiGetProdukTitipanPenitip = () => {
   }
   produkTitipanPromise = new Promise((resolve, reject) => {
     satellite
-      .get(`https://jurwawe.sga.dom.my.id/api/produk-titipan/index`, {
+      .get(`http://127.0.0.1:8000/api/produk-titipan/index`, {
         headers: {
           Authorization: `Bearer ${read("__TOKEN__")}`,
         },
@@ -64,7 +64,7 @@ export const apiGetProdukTitipanPenitip = () => {
 export const apiCreateProdukTitipan = async (form: any) => {
   try {
     const response = await axios.post(
-      `https://jurwawe.sga.dom.my.id/api/produk-titipan/store`,
+      `http://127.0.0.1:8000/api/produk-titipan/store`,
       form,
       {
         headers: {
